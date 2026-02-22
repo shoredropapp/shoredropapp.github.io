@@ -42,9 +42,10 @@ const Hero = () => {
                 className="text-lg px-8 py-6 rounded-full text-[#083b6c] hover:bg-[#e6f9ff]/50 transition-all duration-300"
                 onClick = {(e)=>{
                    e.preventDefault();
-                   if (document != null) {
+                   const target = document.querySelector("#learn-more");
+                   if (target) {
                     window.scrollTo({
-                     top: document.querySelector("#learn-more").offsetTop,
+                     top: (target as HTMLElement).offsetTop,
                      behavior: "smooth",
                     });
                    }
