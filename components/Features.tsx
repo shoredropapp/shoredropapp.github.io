@@ -41,7 +41,7 @@ const Features = () => {
       }}
     >
       <div className="container mx-auto px-4">
-        <div className="text-center mb-20">
+        <div id="learn-more" className="text-center mb-20">
           <h2
             className="text-5xl font-light mb-6"
             style={{ color: "hsl(210, 85%, 25%)" }} // ocean-deep
