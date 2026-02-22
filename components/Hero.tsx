@@ -42,10 +42,13 @@ const Hero = () => {
                 className="text-lg px-8 py-6 rounded-full text-[#083b6c] hover:bg-[#e6f9ff]/50 transition-all duration-300"
                 onClick = {(e)=>{
                    e.preventDefault();
-                   window.scrollTo({
-                   top: document.querySelector("#learn-more").offsetTop,
-                   behavior: "smooth",
-                });}}
+                   if (document != null) {
+                    window.scrollTo({
+                     top: document.querySelector("#learn-more").offsetTop,
+                     behavior: "smooth",
+                    });
+                   }
+                }}
               >
                 Learn More
                 <ArrowRight className="ml-2 h-5 w-5" />
