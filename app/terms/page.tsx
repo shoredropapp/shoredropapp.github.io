@@ -13,6 +13,14 @@ export const metadata: Metadata = {
     description:
       "The terms that govern your access to and use of the ShoreDrop website, mobile app, and delivery services.",
     url: "/terms",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "ShoreDrop — Beach Day Delivery",
+      },
+    ],
   },
 };
 

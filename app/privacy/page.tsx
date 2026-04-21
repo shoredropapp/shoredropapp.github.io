@@ -13,6 +13,14 @@ export const metadata: Metadata = {
     description:
       "How ShoreDrop collects, uses, shares, and protects your personal information.",
     url: "/privacy",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "ShoreDrop — Beach Day Delivery",
+      },
+    ],
   },
 };
 
