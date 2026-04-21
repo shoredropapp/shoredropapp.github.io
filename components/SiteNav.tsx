@@ -7,7 +7,7 @@ const SiteNav = () => {
         <a href="/" className="flex items-center space-x-3">
           <img
             src="/lovable-uploads/dbf79a37-c86d-49c9-af90-9fe7b44058fc.jpg"
-            alt="Main Logo"
+            alt="ShoreDrop logo"
             className="w-12 h-12"
           />
           <h1 className="text-2xl font-light text-ocean-deep">ShoreDrop</h1>

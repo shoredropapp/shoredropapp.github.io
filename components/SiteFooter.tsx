@@ -10,7 +10,7 @@ const SiteFooter = () => {
             <div className="flex items-center space-x-3">
               <img
                 src="/lovable-uploads/dbf79a37-c86d-49c9-af90-9fe7b44058fc.jpg"
-                alt="Main Logo"
+                alt="ShoreDrop logo"
                 className="w-12 h-12"
               />
               <h3 className="text-lg font-medium text-ocean-deep">ShoreDrop</h3>
@@ -54,16 +54,16 @@ const SiteFooter = () => {
             <div className="flex items-center space-x-6">
               <span className="text-sm font-medium text-ocean-deep">Follow Us</span>
               <div className="flex space-x-4">
-                <a href="https://www.instagram.com/shoredropapp" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-ocean-deep transition-colors">
+                <a href="https://www.instagram.com/shoredropapp" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-ocean-deep transition-colors" aria-label="ShoreDrop on Instagram">
                   <Instagram size={20} />
                 </a>
-                <a href="https://www.facebook.com/share/1HH6Ak5ptN/?mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-ocean-deep transition-colors">
+                <a href="https://www.facebook.com/share/1HH6Ak5ptN/?mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-ocean-deep transition-colors" aria-label="ShoreDrop on Facebook">
                   <Facebook size={20} />
                 </a>
-                <a href="https://www.tiktok.com/@shoredrop?_r=1&_t=ZT-945pDzsERR8" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-ocean-deep transition-colors">
+                <a href="https://www.tiktok.com/@shoredrop?_r=1&_t=ZT-945pDzsERR8" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-ocean-deep transition-colors" aria-label="ShoreDrop on TikTok">
                   <FaTiktok size={20} />
                 </a>
-                <a href="https://www.linkedin.com/company/shoredrop/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-ocean-deep transition-colors">
+                <a href="https://www.linkedin.com/company/shoredrop/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-ocean-deep transition-colors" aria-label="ShoreDrop on LinkedIn">
                   <Linkedin size={20} />
                 </a>
               </div>
