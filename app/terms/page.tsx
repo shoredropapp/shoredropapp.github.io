@@ -4,8 +4,24 @@ import SiteFooter from "../../components/SiteFooter";
 import { SUPPORT_EMAIL } from "../../lib/contact";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — ShoreDrop",
-  description: "The terms that govern your use of ShoreDrop.",
+  title: "Terms of Service",
+  description:
+    "The terms that govern your access to and use of the ShoreDrop website, mobile app, and delivery services.",
+  alternates: { canonical: "/terms" },
+  openGraph: {
+    title: "Terms of Service — ShoreDrop",
+    description:
+      "The terms that govern your access to and use of the ShoreDrop website, mobile app, and delivery services.",
+    url: "/terms",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "ShoreDrop — Beach Day Delivery",
+      },
+    ],
+  },
 };
 
 export default function TermsPage() {

@@ -1,28 +1,13 @@
-"use client";
+import type { Metadata } from "next";
+import HomeClient from "../components/HomeClient";
 
-import Hero from "../components/Hero";
-import Features from "../components/Features";
-import Services from "../components/Services";
-import SiteNav from "../components/SiteNav";
-import SiteFooter from "../components/SiteFooter";
-import { CartProvider } from "../contexts/CartContext";
+export const metadata: Metadata = {
+  title: "ShoreDrop — Beach Day Delivery",
+  description:
+    "On-demand delivery of beach chairs, umbrellas, coolers, snacks, and drinks. Order from your towel — ShoreDrop brings the beach to you.",
+  alternates: { canonical: "/" },
+};
 
-export default function HomePage() {
-  return (
-    <CartProvider>
-      <div className="min-h-screen">
-        <SiteNav />
-
-        <Hero />
-        <div id="features">
-          <Features />
-        </div>
-        <div id="services">
-          <Services />
-        </div>
-
-        <SiteFooter />
-      </div>
-    </CartProvider>
-  );
+export default function Page() {
+  return <HomeClient />;
 }

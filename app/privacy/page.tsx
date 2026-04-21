@@ -4,8 +4,24 @@ import SiteFooter from "../../components/SiteFooter";
 import { SUPPORT_EMAIL } from "../../lib/contact";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — ShoreDrop",
-  description: "How ShoreDrop collects, uses, and protects your information.",
+  title: "Privacy Policy",
+  description:
+    "How ShoreDrop collects, uses, shares, and protects your personal information.",
+  alternates: { canonical: "/privacy" },
+  openGraph: {
+    title: "Privacy Policy — ShoreDrop",
+    description:
+      "How ShoreDrop collects, uses, shares, and protects your personal information.",
+    url: "/privacy",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "ShoreDrop — Beach Day Delivery",
+      },
+    ],
+  },
 };
 
 export default function PrivacyPage() {
