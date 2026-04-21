@@ -16,7 +16,6 @@ import { Badge } from '../components/badge';
 import { Separator } from '../components/separator';
 import CartItem from './CartItem';
 import EmptyCart from './EmptyCart';
-import { useNavigate } from 'react-router-dom';
 import { useRouter } from "next/navigation";
 
 import { CartItem as CartItemType } from '../types/cart';
