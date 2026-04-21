@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SUPPORT_EMAIL, SUPPORT_PHONE_TEL } from "../lib/contact";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -59,11 +60,34 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "ShoreDrop",
+    legalName: "ShoreDrop LLC",
+    description:
+      "On-demand delivery of beach essentials — chairs, umbrellas, coolers, snacks, and drinks.",
+    url: "https://shoredropapp.github.io",
+    email: SUPPORT_EMAIL,
+    telephone: SUPPORT_PHONE_TEL,
+    areaServed: "US",
+    sameAs: [
+      "https://www.instagram.com/shoredropapp",
+      "https://www.facebook.com/share/1HH6Ak5ptN/?mibextid=LQQJ4d",
+      "https://www.tiktok.com/@shoredrop",
+      "https://www.linkedin.com/company/shoredrop/",
+    ],
+  };
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         {children}
       </body>
     </html>
