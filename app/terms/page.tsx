@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import SiteNav from "../../components/SiteNav";
 import SiteFooter from "../../components/SiteFooter";
-import { SUPPORT_EMAIL } from "../../lib/contact";
+import { SUPPORT_EMAIL, SUPPORT_PHONE, SUPPORT_PHONE_TEL } from "../../lib/contact";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -322,6 +322,15 @@ export default function TermsPage() {
           <section>
             <h2 className="font-semibold text-base text-foreground mb-2">24. Contact Information</h2>
             <p className="mb-1">📧 {SUPPORT_EMAIL}</p>
+            <p className="mb-1">
+              📞{" "}
+              <a
+                href={`tel:${SUPPORT_PHONE_TEL}`}
+                className="text-ocean-deep font-medium underline underline-offset-2 hover:text-ocean-light transition-colors"
+              >
+                {SUPPORT_PHONE}
+              </a>
+            </p>
             <p>🌐 www.shoredropapp.com</p>
           </section>
         </div>
