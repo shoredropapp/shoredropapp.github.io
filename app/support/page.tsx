@@ -3,6 +3,8 @@ import SiteNav from "../../components/SiteNav";
 import SiteFooter from "../../components/SiteFooter";
 
 const SUPPORT_MAIL_DISPLAY = "Admin@shoredropapp.com";
+const SUPPORT_PHONE_DISPLAY = "(757) 837-3828";
+const SUPPORT_PHONE_TEL = "+17578373828";
 
 export const metadata: Metadata = {
   title: "Support",
@@ -47,6 +49,16 @@ export default function SupportPage() {
                 className="text-ocean-deep font-medium underline underline-offset-2 hover:text-ocean-light transition-colors"
               >
                 {SUPPORT_MAIL_DISPLAY}
+              </a>
+              .
+            </p>
+            <p className="mb-2">
+              Phone{" "}
+              <a
+                href={`tel:${SUPPORT_PHONE_TEL}`}
+                className="text-ocean-deep font-medium underline underline-offset-2 hover:text-ocean-light transition-colors"
+              >
+                {SUPPORT_PHONE_DISPLAY}
               </a>
               .
             </p>
