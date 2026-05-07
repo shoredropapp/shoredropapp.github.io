@@ -32,8 +32,8 @@ const SiteFooter = () => {
           <div>
             <h4 className="font-medium text-ocean-deep mb-4">Support</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-ocean-deep transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-ocean-deep transition-colors">Contact Us</a></li>
+              <li><a href="/support" className="hover:text-ocean-deep transition-colors">Help Center</a></li>
+              <li><a href="/support" className="hover:text-ocean-deep transition-colors">Contact Us</a></li>
               <li><a href="#" className="hover:text-ocean-deep transition-colors">Partners</a></li>
             </ul>
           </div>

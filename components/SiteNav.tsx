@@ -15,6 +15,7 @@ const SiteNav = () => {
         <div className="hidden md:flex items-center space-x-8 ml-auto">
           <a href="/#features" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Features</a>
           <a href="/#services" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Services</a>
+          <a href="/support" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Support</a>
           <Button
             variant="default"
             size="sm"
