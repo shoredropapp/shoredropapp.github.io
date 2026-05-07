@@ -43,6 +43,9 @@ const SiteFooter = () => {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li><a href="/privacy" className="hover:text-ocean-deep transition-colors">Privacy</a></li>
               <li><a href="/terms" className="hover:text-ocean-deep transition-colors">Terms</a></li>
+              <li><a href="/cancellation" className="hover:text-ocean-deep transition-colors">Cancellation</a></li>
+              <li><a href="/rental-policy" className="hover:text-ocean-deep transition-colors">Rental policy</a></li>
+              <li><a href="/liability-waiver" className="hover:text-ocean-deep transition-colors">Liability waiver</a></li>
             </ul>
           </div>
         </div>

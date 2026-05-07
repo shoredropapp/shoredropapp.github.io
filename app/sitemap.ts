@@ -14,13 +14,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${BASE}/privacy`,
-      lastModified: "2026-01-13",
+      lastModified: "2026-04-22",
       changeFrequency: "yearly",
       priority: 0.5,
     },
     {
       url: `${BASE}/terms`,
-      lastModified: "2026-01-13",
+      lastModified: "2026-04-22",
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
+      url: `${BASE}/cancellation`,
+      lastModified: "2026-04-22",
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
+      url: `${BASE}/rental-policy`,
+      lastModified: "2026-04-22",
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
+      url: `${BASE}/liability-waiver`,
+      lastModified: "2026-04-22",
       changeFrequency: "yearly",
       priority: 0.5,
     },
