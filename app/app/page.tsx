@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import SiteNav from "../../components/SiteNav";
 import SiteFooter from "../../components/SiteFooter";
-import { Button } from "../../components/button";
 import { IOS_APP_STORE_URL } from "../../lib/app-links";
+
+const APP_PROMO_IMAGE = "/lovable-uploads/8cb1bdbc-787a-463c-9ad8-13203c8d57fa.png";
 
 export const metadata: Metadata = {
   title: "ShoreDrop App",
@@ -57,19 +58,30 @@ export default function ShoreDropAppMarketingPage() {
           </p>
         </section>
 
-        <section className="space-y-6 mb-12 rounded-2xl border border-gray-100 bg-white/80 p-8 shadow-sm">
-          <div className="flex flex-col items-center text-center gap-3">
-            <Button
-              variant="default"
-              size="lg"
-              className="rounded-full bg-ocean-light hover:bg-ocean-deep text-white px-8 py-6 text-base"
-              asChild
-            >
-              <a href={IOS_APP_STORE_URL} target="_blank" rel="noopener noreferrer">
-                Download on the App Store
-              </a>
-            </Button>
-          </div>
+        <section className="mb-12 space-y-6">
+          <a
+            href={IOS_APP_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block overflow-hidden rounded-2xl border border-ocean-deep/15 shadow-md transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ocean-deep focus-visible:ring-offset-2"
+            aria-label="Download ShoreDrop on the App Store"
+          >
+            <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full">
+              <img
+                src={APP_PROMO_IMAGE}
+                alt="ShoreDrop beach setup with chairs, umbrella, and cooler"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep/85 via-ocean-deep/35 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 text-center text-white">
+                <p className="text-lg sm:text-xl font-semibold mb-1">Get ShoreDrop on iPhone</p>
+                <p className="text-sm text-white/90 mb-4">Tap to open the App Store</p>
+                <span className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-ocean-deep shadow-sm transition-colors group-hover:bg-[#e6f9ff]">
+                  Download on the App Store
+                </span>
+              </div>
+            </div>
+          </a>
 
           <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm" aria-label="Related links">
             <a href="/support" className="text-ocean-deep font-medium underline-offset-2 hover:underline">

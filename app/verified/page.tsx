@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import SiteNav from "../../components/SiteNav";
 import SiteFooter from "../../components/SiteFooter";
+import { Button } from "../../components/button";
+import { IOS_APP_STORE_URL } from "../../lib/app-links";
 
 export const metadata: Metadata = {
   title: "Account verified",
@@ -34,6 +36,16 @@ export default function EmailVerifiedPage() {
           <p className="text-sm leading-relaxed text-muted-foreground">
             Your email is confirmed. Return to the ShoreDrop app to finish signing in or pick up where you left off.
           </p>
+          <Button
+            variant="default"
+            size="lg"
+            className="rounded-full bg-ocean-light hover:bg-ocean-deep text-white px-8"
+            asChild
+          >
+            <a href={IOS_APP_STORE_URL} target="_blank" rel="noopener noreferrer">
+              Go back to the app
+            </a>
+          </Button>
           <p className="text-sm text-muted-foreground">
             Need help?{" "}
             <a href="/support" className="text-ocean-deep font-medium underline underline-offset-2 hover:text-ocean-light">
