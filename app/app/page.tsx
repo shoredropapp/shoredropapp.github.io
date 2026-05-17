@@ -63,20 +63,22 @@ export default function ShoreDropAppMarketingPage() {
             href={IOS_APP_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group block overflow-hidden rounded-2xl border border-ocean-deep/15 shadow-md transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ocean-deep focus-visible:ring-offset-2"
+            className="group block overflow-hidden rounded-2xl border border-[#083b6c]/15 shadow-md transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#083b6c] focus-visible:ring-offset-2"
             aria-label="Download ShoreDrop on the App Store"
           >
-            <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full">
+            <div className="relative w-full">
               <img
                 src={APP_PROMO_IMAGE}
                 alt="ShoreDrop beach setup with chairs, umbrella, and cooler"
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                width={1200}
+                height={800}
+                className="block w-full h-[240px] sm:h-[300px] object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep/85 via-ocean-deep/35 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 text-center text-white">
+              <div className="absolute inset-0 bg-gradient-to-t from-[#083b6c]/90 via-[#083b6c]/45 to-[#083b6c]/10 pointer-events-none" />
+              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 text-center text-white pointer-events-none">
                 <p className="text-lg sm:text-xl font-semibold mb-1">Get ShoreDrop on iPhone</p>
                 <p className="text-sm text-white/90 mb-4">Tap to open the App Store</p>
-                <span className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-ocean-deep shadow-sm transition-colors group-hover:bg-[#e6f9ff]">
+                <span className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#083b6c] shadow-sm">
                   Download on the App Store
                 </span>
               </div>

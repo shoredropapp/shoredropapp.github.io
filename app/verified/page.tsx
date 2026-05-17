@@ -57,11 +57,13 @@ export default function EmailVerifiedPage() {
             className="group block overflow-hidden rounded-2xl border border-[#083b6c]/15 shadow-md transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#083b6c] focus-visible:ring-offset-2"
             aria-label="Go back to the ShoreDrop app"
           >
-            <div className="relative aspect-[4/3] w-full">
+            <div className="relative w-full">
               <img
                 src={APP_PROMO_IMAGE}
                 alt="ShoreDrop beach delivery"
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                width={1200}
+                height={800}
+                className="block w-full h-[220px] sm:h-[260px] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#083b6c]/90 via-[#083b6c]/40 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 text-white">
