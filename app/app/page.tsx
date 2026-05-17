@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import SiteNav from "../../components/SiteNav";
 import SiteFooter from "../../components/SiteFooter";
 import { Button } from "../../components/button";
-
-// TODO(App Store): Replace "#" with the production App Store URL when listed, e.g.
-// const IOS_APP_STORE_URL = "https://apps.apple.com/us/app/shoredrop/id0000000000";
-const IOS_APP_STORE_URL = "#";
+import { IOS_APP_STORE_URL } from "../../lib/app-links";
 
 export const metadata: Metadata = {
   title: "ShoreDrop App",
@@ -68,13 +65,10 @@ export default function ShoreDropAppMarketingPage() {
               className="rounded-full bg-ocean-light hover:bg-ocean-deep text-white px-8 py-6 text-base"
               asChild
             >
-              <a href={IOS_APP_STORE_URL}>
+              <a href={IOS_APP_STORE_URL} target="_blank" rel="noopener noreferrer">
                 Download on the App Store
               </a>
             </Button>
-            <p className="text-xs text-muted-foreground max-w-sm">
-              App Store link coming soon—we&apos;ll swap in the live URL as soon as ShoreDrop is listed.
-            </p>
           </div>
 
           <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm" aria-label="Related links">

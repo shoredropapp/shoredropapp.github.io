@@ -1,5 +1,6 @@
 import { Button } from "../components/button";
 import { Smartphone, ArrowRight } from "lucide-react";
+import { IOS_APP_STORE_URL } from "../lib/app-links";
 const brandedImage = "/lovable-uploads/8cb1bdbc-787a-463c-9ad8-13203c8d57fa.png";
 
 const Hero = () => {
@@ -19,22 +20,22 @@ const Hero = () => {
                 Build your own beach setup with premium chairs, umbrellas, and gear — and get meals from your favorite local restaurants delivered on demand, right to your spot.
               </p>
               
-              <button className="bg-[#e6f9ff] border border-[#bbefff] rounded-2xl p-6">
-                <p className="text-lg font-medium text-[#083b6c]">
-                  ShoreDrop App Launching in Virginia Beach, Summer 2026
-                </p>
-              </button>
+              <p className="bg-[#e6f9ff] border border-[#bbefff] rounded-2xl p-6 text-lg font-medium text-[#083b6c]">
+                ShoreDrop is live on the App Store — beach delivery in Virginia Beach.
+              </p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                variant="default" 
-                size="lg" 
+              <Button
+                variant="default"
+                size="lg"
                 className="text-lg px-8 py-6 rounded-full bg-[#bbefff] hover:bg-[#083b6c] transition-all duration-300 text-[#083b6c] hover:text-white"
-                onClick={() => window.open('https://form.typeform.com/to/wFJjW9lU', '_blank')}
+                asChild
               >
-                <Smartphone className="mr-2 h-5 w-5" />
-                Join Waitlist
+                <a href={IOS_APP_STORE_URL} target="_blank" rel="noopener noreferrer">
+                  <Smartphone className="mr-2 h-5 w-5" />
+                  Download on the App Store
+                </a>
               </Button>
               <Button 
                 variant="ghost" 

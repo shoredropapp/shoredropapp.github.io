@@ -1,5 +1,6 @@
 import { Button } from "../components/button";
-import { Smartphone, ArrowRight } from "lucide-react";
+import { Smartphone } from "lucide-react";
+import { IOS_APP_STORE_URL } from "../lib/app-links";
 
 const CTA = () => {
   return (
@@ -16,21 +17,16 @@ const CTA = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-            <Button 
-              variant="secondary" 
-              size="lg" 
+            <Button
+              variant="secondary"
+              size="lg"
               className="text-lg px-8 py-6 rounded-full bg-white text-ocean-deep hover:bg-white/90 transition-all duration-300"
+              asChild
             >
-              <Smartphone className="mr-2 h-5 w-5" />
-              Get Early Access
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="lg" 
-              className="text-lg px-8 py-6 rounded-full text-white border-white/30 hover:bg-white/10 transition-all duration-300"
-            >
-              ShoreDrop App launching soon — join the waitlist here.
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <a href={IOS_APP_STORE_URL} target="_blank" rel="noopener noreferrer">
+                <Smartphone className="mr-2 h-5 w-5" />
+                Download on the App Store
+              </a>
             </Button>
           </div>
         </div>

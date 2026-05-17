@@ -1,4 +1,5 @@
 import { Button } from "./button";
+import { IOS_APP_STORE_URL } from "../lib/app-links";
 
 const SiteNav = () => {
   return (
@@ -15,6 +16,7 @@ const SiteNav = () => {
         <div className="hidden md:flex items-center space-x-8 ml-auto">
           <a href="/#features" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Features</a>
           <a href="/#services" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Services</a>
+          <a href="/mission" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Mission</a>
           <a href="/app" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">App</a>
           <a href="/support" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Support</a>
           <Button
@@ -23,7 +25,9 @@ const SiteNav = () => {
             className="rounded-full bg-ocean-light hover:bg-ocean-deep text-white transition-colors"
             asChild
           >
-            <a href="/app">Download App</a>
+            <a href={IOS_APP_STORE_URL} target="_blank" rel="noopener noreferrer">
+              Download App
+            </a>
           </Button>
         </div>
       </div>
