@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import SiteNav from "../../components/SiteNav";
 import SiteFooter from "../../components/SiteFooter";
-import { IOS_APP_STORE_URL } from "../../lib/app-links";
-
-const APP_PROMO_IMAGE = "/lovable-uploads/8cb1bdbc-787a-463c-9ad8-13203c8d57fa.png";
+import AppStoreCta from "../../components/AppStoreCta";
 
 export const metadata: Metadata = {
   title: "ShoreDrop App",
@@ -59,31 +57,7 @@ export default function ShoreDropAppMarketingPage() {
         </section>
 
         <section className="mb-12 space-y-6">
-          <a
-            href={IOS_APP_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group block overflow-hidden rounded-2xl border border-[#083b6c]/15 shadow-md transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#083b6c] focus-visible:ring-offset-2"
-            aria-label="Download ShoreDrop on the App Store"
-          >
-            <div className="relative w-full">
-              <img
-                src={APP_PROMO_IMAGE}
-                alt="ShoreDrop beach setup with chairs, umbrella, and cooler"
-                width={1200}
-                height={800}
-                className="block w-full h-[240px] sm:h-[300px] object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#083b6c]/90 via-[#083b6c]/45 to-[#083b6c]/10 pointer-events-none" />
-              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 text-center text-white pointer-events-none">
-                <p className="text-lg sm:text-xl font-semibold mb-1">Get ShoreDrop on iPhone</p>
-                <p className="text-sm text-white/90 mb-4">Tap to open the App Store</p>
-                <span className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#083b6c] shadow-sm">
-                  Download on the App Store
-                </span>
-              </div>
-            </div>
-          </a>
+          <AppStoreCta />
 
           <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm" aria-label="Related links">
             <a href="/support" className="text-ocean-deep font-medium underline-offset-2 hover:underline">
