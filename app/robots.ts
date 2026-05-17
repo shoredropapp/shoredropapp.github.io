@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "../lib/site-url";
 
 export const dynamic = "force-static";
 
@@ -8,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://shoredropapp.github.io/sitemap.xml",
-    host: "https://shoredropapp.github.io",
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

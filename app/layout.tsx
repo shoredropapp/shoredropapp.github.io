@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SUPPORT_EMAIL, SUPPORT_PHONE_TEL } from "../lib/contact";
+import { SITE_URL } from "../lib/site-url";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shoredropapp.github.io"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "ShoreDrop — Beach Day Delivery",
     template: "%s — ShoreDrop",
@@ -67,7 +68,7 @@ export default function RootLayout({
     legalName: "ShoreDrop LLC",
     description:
       "On-demand delivery of beach essentials — chairs, umbrellas, coolers, snacks, and drinks.",
-    url: "https://shoredropapp.github.io",
+    url: SITE_URL,
     email: SUPPORT_EMAIL,
     telephone: SUPPORT_PHONE_TEL,
     areaServed: "US",
