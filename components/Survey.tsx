@@ -207,7 +207,6 @@ const Survey = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {[
                         "Cold drinks (water, lemonade, Gatorade)",
-                        "Towels",
                         "Beach games (Spikeball, bucketball, football)",
                         "Extra umbrellas/tents"
                       ].map((addon) => (

@@ -47,7 +47,6 @@ const Services = () => {
     { image: "/assets/beach-chair.jpg", name: "Chair", price: "$15", description: "" },
     { image: "/assets/beach-tent.jpg", name: "Tent", price: "$25", description: "" },
     { image: "/assets/beach-umbrella.jpg", name: "Umbrella", price: "$30", description: "" },
-    { image: "/assets/beach-towel.jpg", name: "Towel", price: "$3", description: "" },
     { image: "/assets/small-cooler.jpg", name: "Small Cooler with Ice", price: "$15"},
     { image: "/assets/large-cooler.jpg", name: "Large Cooler with Ice", price: "$25"}
   ];
@@ -126,7 +125,7 @@ const Services = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-5xl mx-auto">
             {customItems.map((item, index) => (
               <Card
                 key={index}

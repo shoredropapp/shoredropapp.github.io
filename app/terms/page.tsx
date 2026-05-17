@@ -44,7 +44,7 @@ export default function TermsPage() {
           <section>
             <h2 className="font-semibold text-base text-foreground mb-2">1. About ShoreDrop</h2>
             <p className="mb-2">
-              ShoreDrop LLC (&quot;ShoreDrop,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is a technology platform that facilitates on-demand delivery of beach-related goods and services, including but not limited to chairs, umbrellas, coolers, towels, snacks, drinks, and rental equipment.
+              ShoreDrop LLC (&quot;ShoreDrop,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is a technology platform that facilitates on-demand delivery of beach-related goods and services, including but not limited to chairs, umbrellas, coolers, snacks, drinks, and rental equipment.
             </p>
             <p className="mb-2">
               Services may be fulfilled directly by ShoreDrop or by independent third-party vendors, merchants, or delivery providers. ShoreDrop acts solely as a delivery facilitator for third-party food vendors and is not responsible for food preparation, ingredient disclosures, or restaurant operations.
