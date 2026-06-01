@@ -51,7 +51,7 @@ export default function BlogIndexPage() {
               key={post.slug}
               className="rounded-2xl overflow-hidden border border-gray-100 bg-white shadow-sm"
             >
-              <a href={`/blog/${post.slug}`} className="block">
+              <a href={`/blog/${post.slug}/`} className="block">
                 <img
                   src={post.image}
                   alt={post.imageAlt}
