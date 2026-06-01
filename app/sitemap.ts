@@ -33,10 +33,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
-      url: `${BASE}/article`,
+      url: `${BASE}/blog`,
       lastModified: "2026-05-31",
       changeFrequency: "monthly",
       priority: 0.7,
+    },
+    {
+      url: `${BASE}/blog/beach-chair-rental-virginia-beach`,
+      lastModified: "2026-05-27",
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${BASE}/blog/what-to-bring-to-virginia-beach`,
+      lastModified: "2026-05-27",
+      changeFrequency: "monthly",
+      priority: 0.65,
+    },
+    {
+      url: `${BASE}/blog/food-delivery-to-the-beach`,
+      lastModified: "2026-05-27",
+      changeFrequency: "monthly",
+      priority: 0.65,
     },
     {
       url: `${BASE}/privacy`,

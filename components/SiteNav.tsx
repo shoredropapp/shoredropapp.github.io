@@ -17,6 +17,7 @@ const SiteNav = () => {
           <a href="/#features" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Features</a>
           <a href="/#services" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Services</a>
           <a href="/mission" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Mission</a>
+          <a href="/blog" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Blog</a>
           <a href="/app" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">App</a>
           <a href="/support" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Support</a>
           <Button
