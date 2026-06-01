@@ -25,6 +25,7 @@ const SiteFooter = () => {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li><a href="/app" className="hover:text-ocean-deep transition-colors">Mobile app</a></li>
               <li><a href="/mission" className="hover:text-ocean-deep transition-colors">Our mission</a></li>
+              <li><a href="/article" className="hover:text-ocean-deep transition-colors">Beach article</a></li>
               <li><a href="#" className="hover:text-ocean-deep transition-colors">Careers</a></li>
               <li><a href="#" className="hover:text-ocean-deep transition-colors">Press</a></li>
             </ul>
