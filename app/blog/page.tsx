@@ -34,6 +34,8 @@ function formatDate(date: string): string {
 }
 
 export default function BlogIndexPage() {
+  const chips = ["All", "Beach Tips", "Virginia Beach Tips", "Food Delivery", "Private Events"];
+
   return (
     <div className="min-h-screen">
       <SiteNav />
@@ -44,6 +46,21 @@ export default function BlogIndexPage() {
             Your guide to easier beach days in Virginia Beach.
           </p>
         </header>
+
+        <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
+          {chips.map((chip, idx) => (
+            <span
+              key={chip}
+              className={`px-4 py-2 rounded-full text-sm ${
+                idx === 0
+                  ? "bg-[#083b6c] text-white"
+                  : "bg-[#e6f9ff] text-ocean-deep"
+              }`}
+            >
+              {chip}
+            </span>
+          ))}
+        </div>
 
         <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogPosts.map((post) => (
@@ -66,6 +83,24 @@ export default function BlogIndexPage() {
               </a>
             </article>
           ))}
+        </section>
+
+        <section className="mt-12 max-w-3xl mx-auto rounded-2xl border border-[#083b6c]/10 bg-[#e6f9ff]/50 p-6 text-center space-y-4">
+          <h2 className="text-3xl font-light text-ocean-deep">Get Virginia Beach tips delivered to your inbox.</h2>
+          <form className="flex flex-col sm:flex-row gap-3 justify-center">
+            <input
+              type="email"
+              placeholder="you@email.com"
+              className="w-full sm:w-80 rounded-md border border-gray-200 px-3 py-2 text-sm"
+              aria-label="Email"
+            />
+            <button
+              type="submit"
+              className="rounded-md bg-[#083b6c] px-5 py-2 text-sm font-semibold text-white hover:bg-[#062a4d]"
+            >
+              Subscribe
+            </button>
+          </form>
         </section>
       </main>
       <SiteFooter />

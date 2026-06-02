@@ -39,6 +39,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
+      url: `${BASE}/private-events`,
+      lastModified: "2026-06-02",
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
+    {
       url: `${BASE}/blog/beach-chair-rental-virginia-beach`,
       lastModified: "2026-05-27",
       changeFrequency: "monthly",
@@ -52,6 +58,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${BASE}/blog/food-delivery-to-the-beach`,
+      lastModified: "2026-05-27",
+      changeFrequency: "monthly",
+      priority: 0.65,
+    },
+    {
+      url: `${BASE}/blog/how-to-plan-a-private-beach-event-in-virginia-beach`,
+      lastModified: "2026-05-27",
+      changeFrequency: "monthly",
+      priority: 0.65,
+    },
+    {
+      url: `${BASE}/blog/ultimate-virginia-beach-family-vacation-guide-2026`,
       lastModified: "2026-05-27",
       changeFrequency: "monthly",
       priority: 0.65,

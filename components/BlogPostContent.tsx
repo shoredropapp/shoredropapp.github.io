@@ -1,7 +1,7 @@
 import SiteNav from "./SiteNav";
 import SiteFooter from "./SiteFooter";
 import { IOS_APP_STORE_URL } from "../lib/app-links";
-import type { BlogPost } from "../lib/blog-posts";
+import { blogPosts, type BlogPost } from "../lib/blog-posts";
 
 function formatDate(date: string): string {
   return new Date(`${date}T00:00:00.000Z`).toLocaleDateString("en-US", {
@@ -13,6 +13,7 @@ function formatDate(date: string): string {
 }
 
 export default function BlogPostContent({ post }: { post: BlogPost }) {
+  const related = blogPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
   return (
     <div className="min-h-screen">
       <SiteNav />
@@ -60,6 +61,23 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
               Download ShoreDrop on the App Store
             </a>
           </div>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl font-semibold text-ocean-deep">You may also like</h2>
+            <div className="grid md:grid-cols-3 gap-5">
+              {related.map((item) => (
+                <article key={item.slug} className="rounded-xl overflow-hidden border border-gray-100 bg-white shadow-sm">
+                  <a href={`/blog/${item.slug}/`} className="block">
+                    <img src={item.image} alt={item.imageAlt} className="w-full h-36 object-cover" />
+                    <div className="p-4 space-y-2">
+                      <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{item.category}</p>
+                      <h3 className="text-base font-semibold text-ocean-deep leading-tight">{item.title}</h3>
+                    </div>
+                  </a>
+                </article>
+              ))}
+            </div>
+          </section>
         </article>
       </main>
       <SiteFooter />

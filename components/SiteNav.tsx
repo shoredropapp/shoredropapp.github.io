@@ -14,12 +14,10 @@ const SiteNav = () => {
           <h1 className="text-2xl font-light text-ocean-deep">ShoreDrop</h1>
         </a>
         <div className="hidden md:flex items-center space-x-8 ml-auto">
-          <a href="/#features" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Features</a>
-          <a href="/#services" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Services</a>
-          <a href="/mission" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Mission</a>
+          <a href="/" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Home</a>
+          <a href="/private-events" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Private Events</a>
           <a href="/blog" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Blog</a>
-          <a href="/app" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">App</a>
-          <a href="/support" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Support</a>
+          <a href="/mission" className="text-sm font-medium text-muted-foreground hover:text-ocean-deep transition-colors">Our Mission</a>
           <Button
             variant="default"
             size="sm"
@@ -27,7 +25,7 @@ const SiteNav = () => {
             asChild
           >
             <a href={IOS_APP_STORE_URL} target="_blank" rel="noopener noreferrer">
-              Download App
+              Book Now
             </a>
           </Button>
         </div>
