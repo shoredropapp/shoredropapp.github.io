@@ -20,7 +20,8 @@ export const blogPosts: BlogPost[] = [
       "Planning a trip to Virginia Beach? Skip the hauling. Here's everything you need to know about beach chair rental - and a smarter, on-demand way to do it.",
     category: "Beach Tips",
     publishedAt: "2026-05-27",
-    image: "/assets/hero-beach.jpg",
+    image:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80&auto=format&fit=crop",
     imageAlt: "Virginia Beach shoreline at sunset",
     sections: [
       {
@@ -93,7 +94,8 @@ export const blogPosts: BlogPost[] = [
       "Packing for Virginia Beach? Here's a practical guide to what you actually need to bring - and what you can leave at home thanks to ShoreDrop.",
     category: "Beach Tips",
     publishedAt: "2026-05-27",
-    image: "/assets/sandy-duo-package.jpg",
+    image:
+      "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1600&q=80&auto=format&fit=crop",
     imageAlt: "Beach setup with chairs and umbrella",
     sections: [
       {
@@ -162,7 +164,8 @@ export const blogPosts: BlogPost[] = [
       "Get food and drinks delivered directly to your spot on the Virginia Beach sand. ShoreDrop brings meals from local restaurants right to your chair.",
     category: "Food Delivery",
     publishedAt: "2026-05-27",
-    image: "/assets/mega-drop-package.jpg",
+    image:
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&q=80&auto=format&fit=crop",
     imageAlt: "Food and drinks arranged for beach day service",
     sections: [
       {
@@ -234,7 +237,7 @@ export const blogPosts: BlogPost[] = [
       "Planning a private beach event in Virginia Beach? ShoreDrop handles setup, gear, food, and breakdown so you can focus on your guests.",
     category: "Private Events",
     publishedAt: "2026-05-27",
-    image: "/assets/shady-bunch-package.jpg",
+    image: "https://shoredrop-website-mock-87813.lovable.app/blog/private-events-hero.png",
     imageAlt: "Private group beach setup at sunset",
     sections: [
       {
@@ -309,7 +312,7 @@ export const blogPosts: BlogPost[] = [
       "Planning a family vacation to Virginia Beach in 2026? Best beaches, kid activities, eats, and how to make beach days stress-free with ShoreDrop.",
     category: "Virginia Beach Tips",
     publishedAt: "2026-05-27",
-    image: "/assets/chill-pill-package.jpg",
+    image: "https://shoredrop-website-mock-87813.lovable.app/blog/family-guide-hero.png",
     imageAlt: "Family-friendly beach setup in Virginia Beach",
     sections: [
       {

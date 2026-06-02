@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BriefcaseBusiness, Cake, Check, Heart, PartyPopper } from "lucide-react";
 import SiteNav from "../../components/SiteNav";
 import SiteFooter from "../../components/SiteFooter";
 
@@ -64,15 +65,20 @@ const included = [
 ];
 
 export default function PrivateEventsPage() {
-  const eventTypes = ["Birthdays", "Weddings & Proposals", "Corporate Outings", "Bachelor / Bachelorette"];
+  const eventTypes = [
+    { name: "Birthdays", icon: Cake },
+    { name: "Weddings & Proposals", icon: Heart },
+    { name: "Corporate Outings", icon: BriefcaseBusiness },
+    { name: "Bachelor / Bachelorette", icon: PartyPopper },
+  ];
 
   return (
     <div className="min-h-screen">
       <SiteNav />
-      <main className="container mx-auto max-w-7xl px-4 pt-32 pb-20 space-y-14">
+      <main className="container mx-auto max-w-6xl px-4 pt-32 pb-20 space-y-14">
         <header className="text-center max-w-3xl mx-auto space-y-4">
           <h1 className="text-4xl md:text-5xl font-light text-ocean-deep">Private Events</h1>
-          <p className="text-muted-foreground">
+          <p className="text-base text-muted-foreground">
             From birthdays to weddings - your day, your shore, your way. We bring the beach to
             life with curated setups, Mega Drops, and fully custom experiences.
           </p>
@@ -84,46 +90,59 @@ export default function PrivateEventsPage() {
           </a>
         </header>
 
-        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {eventTypes.map((eventType) => (
-            <div
-              key={eventType}
-              className="rounded-xl border border-[#e8edf3] bg-white px-4 py-3 text-center shadow-[0_1px_6px_rgba(8,59,108,0.05)]"
-            >
-              <p className="text-base font-medium text-ocean-deep">{eventType}</p>
-            </div>
-          ))}
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {eventTypes.map((eventType) => {
+            const Icon = eventType.icon;
+            return (
+              <div
+                key={eventType.name}
+                className="rounded-xl border border-[#e7edf5] bg-white px-4 py-5 text-center shadow-[0_1px_6px_rgba(8,59,108,0.05)]"
+              >
+                <span className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#eff7ff] text-[#1d7bd8]">
+                  <Icon size={18} />
+                </span>
+                <p className="text-sm font-medium text-ocean-deep">{eventType.name}</p>
+              </div>
+            );
+          })}
         </section>
 
         <section className="space-y-5">
-          <h2 className="text-5xl font-light text-ocean-deep">Packages</h2>
-          <p className="text-[28px] text-muted-foreground">
-            Start with a package, then upgrade to a Mega Drop or fully customize.
-          </p>
+          <div className="text-center space-y-2">
+            <h2 className="text-4xl font-light text-ocean-deep">Packages</h2>
+            <p className="text-sm text-muted-foreground">
+              Start with a package, then upgrade to a Mega Drop or fully customize.
+            </p>
+          </div>
           <div className="grid gap-6 lg:grid-cols-3">
             {packages.map((pkg) => (
               <article
                 key={pkg.name}
-                className={`rounded-2xl border bg-white p-7 shadow-[0_2px_10px_rgba(8,59,108,0.06)] ${
+                className={`flex flex-col rounded-2xl border bg-white p-6 shadow-[0_2px_10px_rgba(8,59,108,0.06)] ${
                   pkg.featured ? "border-[#1d7bd8]" : "border-[#e7edf5]"
                 }`}
               >
                 {pkg.featured ? (
-                  <p className="mb-4 inline-block rounded-md bg-[#eaf4ff] px-3 py-1 text-xs font-semibold text-[#1d7bd8]">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#1d7bd8]">
                     Most Popular
                   </p>
-                ) : null}
-                <h3 className="text-[43px] leading-tight font-semibold text-ocean-deep">{pkg.name}</h3>
-                <p className="mt-1 text-[34px] text-muted-foreground">{pkg.size}</p>
-                <ul className="mt-5 space-y-2 text-[30px] leading-snug text-ocean-deep">
+                ) : (
+                  <span className="mb-3 block h-5" aria-hidden />
+                )}
+                <h3 className="text-2xl font-medium text-ocean-deep leading-tight">{pkg.name}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{pkg.size}</p>
+                <ul className="mt-4 flex-1 space-y-2 text-sm text-ocean-deep">
                   {pkg.items.map((item) => (
-                    <li key={item}>- {item}</li>
+                    <li key={item} className="flex items-start gap-2">
+                      <Check size={14} className="mt-0.5 shrink-0 text-[#1d7bd8]" />
+                      <span>{item}</span>
+                    </li>
                   ))}
                 </ul>
-                <p className="mt-5 text-base italic text-[#7d9ab6]">Upgrade to Mega Drop available.</p>
+                <p className="mt-4 text-sm italic text-[#7d9ab6]">Upgrade to Mega Drop available.</p>
                 <a
                   href="/support"
-                  className={`mt-6 inline-flex w-full items-center justify-center rounded-full border px-5 py-3 text-base font-semibold transition-colors ${
+                  className={`mt-4 inline-flex w-full items-center justify-center rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors ${
                     pkg.featured
                       ? "border-[#1d7bd8] bg-[#1d7bd8] text-white hover:bg-[#1366b8]"
                       : "border-[#e7edf5] bg-white text-ocean-deep hover:bg-[#f6fbff]"
@@ -137,15 +156,18 @@ export default function PrivateEventsPage() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-5xl font-light text-ocean-deep">What's Included</h2>
-          <div className="grid gap-4 md:grid-cols-2">
+          <h2 className="text-center text-4xl font-light text-ocean-deep">What's Included</h2>
+          <div className="mx-auto grid max-w-4xl gap-3 sm:grid-cols-2">
             {included.map((item) => (
-              <p
+              <div
                 key={item}
-                className="rounded-lg border border-[#e7edf5] bg-white px-4 py-3 text-[28px] text-ocean-deep shadow-[0_1px_6px_rgba(8,59,108,0.05)]"
+                className="flex items-center gap-3 rounded-lg border border-[#e7edf5] bg-white px-4 py-3 text-sm text-ocean-deep shadow-[0_1px_6px_rgba(8,59,108,0.05)]"
               >
-                {item}
-              </p>
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#eff7ff] text-[#1d7bd8]">
+                  <Check size={14} />
+                </span>
+                <p>{item}</p>
+              </div>
             ))}
           </div>
         </section>
