@@ -158,8 +158,8 @@ export default function BookingClient() {
     }
   }, [serviceDate, startTime, durationHours, pickupShoreBlocked, pickupFullBlocked]);
 
-  const availableStartTimes = useMemo(() => {
-    const times = [...GEAR_SETUP_START_TIMES];
+  const availableStartTimes = useMemo((): string[] => {
+    const times: string[] = [...GEAR_SETUP_START_TIMES];
     if (!serviceDate || !isSameEasternDay(serviceDate, new Date())) return times;
     const nowMins = easternMinutesSinceMidnight(new Date());
     return times.filter((t) => {
