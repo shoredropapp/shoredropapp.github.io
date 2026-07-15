@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
+import Providers from "../components/Providers";
 import { SUPPORT_EMAIL, SUPPORT_PHONE_TEL } from "../lib/contact";
 import { SITE_URL } from "../lib/site-url";
 import "./globals.css";
@@ -89,7 +91,8 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {children}
+        <Providers>{children}</Providers>
+        <Toaster richColors position="top-center" />
       </body>
     </html>
   );

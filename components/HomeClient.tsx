@@ -1,26 +1,25 @@
 "use client";
 
-import Hero from "../components/Hero";
-import Features from "../components/Features";
-import Services from "../components/Services";
-import SiteNav from "../components/SiteNav";
-import SiteFooter from "../components/SiteFooter";
-import { CartProvider } from "../contexts/CartContext";
+import Hero from "./Hero";
+import ValueStrip from "./ValueStrip";
+import Features from "./Features";
+import Services from "./Services";
+import SiteNav from "./SiteNav";
+import SiteFooter from "./SiteFooter";
 
 export default function HomeClient() {
   return (
-    <CartProvider>
-      <div className="min-h-screen">
-        <SiteNav />
-        <Hero />
-        <div id="features">
-          <Features />
-        </div>
-        <div id="services">
-          <Services />
-        </div>
-        <SiteFooter />
+    <div className="min-h-screen">
+      <SiteNav />
+      <Hero />
+      <ValueStrip />
+      <div id="features">
+        <Features />
       </div>
-    </CartProvider>
+      <div id="services">
+        <Services />
+      </div>
+      <SiteFooter />
+    </div>
   );
 }

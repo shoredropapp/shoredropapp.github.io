@@ -23,11 +23,12 @@ const SiteFooter = () => {
           <div>
             <h4 className="font-medium text-ocean-deep mb-4">Company</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
-              <li><a href="/app" className="hover:text-ocean-deep transition-colors">Mobile app</a></li>
+              <li><a href="/booking" className="hover:text-ocean-deep transition-colors">Book gear</a></li>
+              <li><a href="/food" className="hover:text-ocean-deep transition-colors">Food & Drinks</a></li>
+              <li><a href="/private-events" className="hover:text-ocean-deep transition-colors">Private Events</a></li>
               <li><a href="/mission" className="hover:text-ocean-deep transition-colors">Our mission</a></li>
               <li><a href="/blog" className="hover:text-ocean-deep transition-colors">Blog</a></li>
-              <li><a href="#" className="hover:text-ocean-deep transition-colors">Careers</a></li>
-              <li><a href="#" className="hover:text-ocean-deep transition-colors">Press</a></li>
+              <li><a href="/app" className="hover:text-ocean-deep transition-colors">Mobile app</a></li>
             </ul>
           </div>
 
