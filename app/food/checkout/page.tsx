@@ -34,6 +34,7 @@ import { createPaymentIntentClientSecret, isStripeConfigured } from "../../../li
 import { isSupabaseConfigured } from "../../../lib/services/supabase";
 import { placeOrderAndDispatch } from "../../../lib/services/orderDispatch";
 import { CONTACT_PHONE_REQUIRED_MESSAGE, isValidContactPhone } from "../../../lib/ordering/phone";
+import { rememberWebOrder } from "../../../lib/ordering/webOrders";
 import { toast } from "sonner";
 
 export default function FoodCheckoutPage() {
@@ -153,7 +154,7 @@ export default function FoodCheckoutPage() {
       const paymentIntentId = await confirmRef.current(clientSecret);
       if (!paymentIntentId) throw new Error("Payment did not complete.");
 
-      const { orderId } = await placeOrderAndDispatch({
+      const { orderId, trackingToken } = await placeOrderAndDispatch({
         customerName: name.trim(),
         customerEmail: authUser?.email || undefined,
         customerPhone: phone.trim(),
@@ -180,8 +181,27 @@ export default function FoodCheckoutPage() {
         })),
       });
 
+      if (trackingToken) {
+        rememberWebOrder({
+          id: orderId,
+          trackingToken,
+          title: restaurant?.name ? `${restaurant.name} food` : "Food & drinks",
+          locationLabel: location.displayName,
+          serviceDateLabel: "Today",
+          startTime: selectedStart,
+          endTime,
+          totalAmount: totals.orderTotalUsd,
+          createdAt: new Date().toISOString(),
+          foodOnly: true,
+        });
+      }
+
       clear();
-      router.push(`/food/confirmation?id=${orderId}&eta=${encodeURIComponent(FOOD_ASAP_ETA_LABEL)}`);
+      router.push(
+        `/food/confirmation?id=${orderId}&eta=${encodeURIComponent(FOOD_ASAP_ETA_LABEL)}${
+          trackingToken ? `&token=${encodeURIComponent(trackingToken)}` : ""
+        }`,
+      );
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not place order.");
     } finally {

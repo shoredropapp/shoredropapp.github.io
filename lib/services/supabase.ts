@@ -26,6 +26,11 @@ export const getRestInsertMinimalHeaders = () => ({
   Prefer: "return=minimal",
 });
 
+export const getRestJsonHeaders = () => ({
+  ...baseAnonHeaders(),
+  "Content-Type": "application/json",
+});
+
 export const getFunctionUrl = (functionName: string) => {
   if (!SUPABASE_URL) throw new Error("Supabase URL missing");
   return `${SUPABASE_URL}/functions/v1/${functionName}`;
@@ -35,3 +40,8 @@ export const getRestUrl = (tableName: string) => {
   if (!SUPABASE_URL) throw new Error("Supabase URL missing");
   return `${SUPABASE_URL}/rest/v1/${tableName}`;
 };
+
+export const getUserFunctionHeaders = (accessToken: string) => ({
+  ...getFunctionHeaders(),
+  Authorization: `Bearer ${accessToken.trim()}`,
+});

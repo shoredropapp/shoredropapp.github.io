@@ -27,6 +27,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${BASE}/orders`,
+      lastModified: "2026-07-15",
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${BASE}/booking`,
+      lastModified: "2026-07-15",
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${BASE}/food`,
+      lastModified: "2026-07-15",
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
       url: `${BASE}/mission`,
       lastModified: "2026-06-26",
       changeFrequency: "yearly",

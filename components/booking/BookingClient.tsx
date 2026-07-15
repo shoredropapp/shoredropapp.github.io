@@ -44,6 +44,7 @@ import StripeCardForm from "../checkout/StripeCardForm";
 import CustomerAuthPanel from "../auth/CustomerAuthPanel";
 import { useCustomerAuth } from "../../contexts/CustomerAuthContext";
 import { CONTACT_PHONE_REQUIRED_MESSAGE, isValidContactPhone } from "../../lib/ordering/phone";
+import { rememberWebOrder } from "../../lib/ordering/webOrders";
 import { toast } from "sonner";
 
 const STEPS = ["Package", "Date", "Duration", "Location", "Pay"] as const;
@@ -70,6 +71,7 @@ export default function BookingClient() {
   const [stripeReady, setStripeReady] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [confirmedId, setConfirmedId] = useState<string | null>(null);
+  const [confirmedTrackingToken, setConfirmedTrackingToken] = useState<string | null>(null);
   const confirmRef = useRef<((clientSecret: string) => Promise<string | undefined>) | null>(null);
 
   useEffect(() => {
@@ -269,7 +271,7 @@ export default function BookingClient() {
 
       const items = [...gearItems, ...foodItems];
 
-      const { orderId, dispatchNotified } = await placeOrderAndDispatch({
+      const { orderId, trackingToken, dispatchNotified } = await placeOrderAndDispatch({
         customerName: name.trim(),
         customerEmail: email.trim() || authUser?.email || undefined,
         customerPhone: phone.trim(),
@@ -287,6 +289,22 @@ export default function BookingClient() {
         totalAmount: totals.orderTotalUsd,
         items,
       });
+
+      if (trackingToken) {
+        rememberWebOrder({
+          id: orderId,
+          trackingToken,
+          title: mode === "package" ? pkg.name : foodLines.length ? "Beach setup + food" : "Custom beach setup",
+          locationLabel: location.displayName,
+          serviceDateLabel: format(serviceDate, "EEE, MMM d"),
+          startTime,
+          endTime,
+          totalAmount: totals.orderTotalUsd,
+          createdAt: new Date().toISOString(),
+          foodOnly: false,
+        });
+        setConfirmedTrackingToken(trackingToken);
+      }
 
       clearFoodBag();
       setConfirmedId(orderId);
@@ -327,6 +345,11 @@ export default function BookingClient() {
           <p className="text-sm text-muted-foreground">{location?.displayName}</p>
           <div className="mt-8 flex flex-col gap-2">
             <Button asChild className="rounded-full bg-[#083b6c]">
+              <Link href={confirmedTrackingToken ? `/orders?focus=${confirmedId}` : "/orders"}>
+                Track order & chat
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="rounded-full">
               <Link href="/food">Add Food & Drinks</Link>
             </Button>
             <Button asChild variant="outline" className="rounded-full">

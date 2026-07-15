@@ -42,6 +42,9 @@ const SiteNav = () => {
           <Link href="/mission" className="text-sm font-medium text-muted-foreground hover:text-[#083b6c]">
             Mission
           </Link>
+          <Link href="/orders" className="text-sm font-medium text-muted-foreground hover:text-[#083b6c]">
+            Orders
+          </Link>
           <CartDrawer />
           <Button asChild size="sm" className="rounded-full bg-[#083b6c] px-5 hover:bg-[#0a4a85]">
             <Link href="/#services">Book Now</Link>
@@ -49,6 +52,12 @@ const SiteNav = () => {
         </div>
 
         <div className="ml-auto flex items-center gap-1 md:hidden">
+          <Link
+            href="/orders"
+            className="rounded-full px-2 py-2 text-xs font-semibold text-[#083b6c] hover:bg-[#e6f9ff]"
+          >
+            Orders
+          </Link>
           <CartDrawer />
           <Button asChild size="sm" className="rounded-full bg-[#083b6c] hover:bg-[#0a4a85]">
             <Link href="/#services">Book Now</Link>
