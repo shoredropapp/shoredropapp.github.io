@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "./button";
-import { ShoppingBag } from "lucide-react";
+import CartDrawer from "./CartDrawer";
 
 const SiteNav = () => {
   return (
@@ -27,7 +27,10 @@ const SiteNav = () => {
           <Link href="/private-events" className="text-sm font-medium text-muted-foreground hover:text-[#083b6c]">
             Private Events
           </Link>
-          <Link href="/food" className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-[#083b6c]">
+          <Link
+            href="/food"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-[#083b6c]"
+          >
             Food & Drinks
             <span className="rounded-full bg-amber-400 px-1.5 py-0.5 text-[9px] font-bold uppercase text-[#083b6c]">
               New
@@ -39,19 +42,14 @@ const SiteNav = () => {
           <Link href="/mission" className="text-sm font-medium text-muted-foreground hover:text-[#083b6c]">
             Mission
           </Link>
-          <Link
-            href="/#services"
-            className="rounded-full p-2 text-[#083b6c] hover:bg-[#e6f9ff]"
-            aria-label="Beach packages"
-          >
-            <ShoppingBag className="h-5 w-5" />
-          </Link>
+          <CartDrawer />
           <Button asChild size="sm" className="rounded-full bg-[#083b6c] px-5 hover:bg-[#0a4a85]">
             <Link href="/#services">Book Now</Link>
           </Button>
         </div>
 
-        <div className="ml-auto flex items-center gap-2 md:hidden">
+        <div className="ml-auto flex items-center gap-1 md:hidden">
+          <CartDrawer />
           <Button asChild size="sm" className="rounded-full bg-[#083b6c] hover:bg-[#0a4a85]">
             <Link href="/#services">Book Now</Link>
           </Button>

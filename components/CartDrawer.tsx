@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from 'react';
-import { ShoppingBag, X } from 'lucide-react';
-import { useCart } from '../contexts/CartContext';
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -10,94 +11,160 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '../components/sheet';
-import { Button } from '../components/button';
-import { Badge } from '../components/badge';
-import { Separator } from '../components/separator';
-import CartItem from './CartItem';
-import EmptyCart from './EmptyCart';
-import { useRouter } from "next/navigation";
+} from "./sheet";
+import { Button } from "./button";
+import { Separator } from "./separator";
+import { useFoodBag } from "../contexts/FoodBagContext";
+import { cn } from "../lib/utils";
 
-import { CartItem as CartItemType } from '../types/cart';
+type CartDrawerProps = {
+  triggerClassName?: string;
+};
 
-
-export default function CartDrawer() {
-  const { cart } = useCart();
+export default function CartDrawer({ triggerClassName }: CartDrawerProps) {
+  const { lines, setQty, subtotal, bagCount } = useFoodBag();
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const handleViewCart = () => {
+  const go = (href: string) => {
     setOpen(false);
-    router.push("/cart");
-  };
-
-  const handleCheckout = () => {
-    setOpen(false);
-    router.push("/booking");
+    router.push(href);
   };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm" className="relative">
-          <ShoppingBag className="h-4 w-4" />
-          {cart.totalItems > 0 && (
-            <Badge 
-              variant="destructive" 
-              className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs"
-            >
-              {cart.totalItems}
-            </Badge>
+        <button
+          type="button"
+          className={cn(
+            "relative rounded-full p-2 text-[#083b6c] hover:bg-[#e6f9ff]",
+            triggerClassName,
           )}
-        </Button>
+          aria-label={`Your cart${bagCount ? `, ${bagCount} items` : ""}`}
+        >
+          <ShoppingBag className="h-5 w-5" />
+          {bagCount > 0 ? (
+            <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#083b6c] px-1 text-[10px] font-bold text-white">
+              {bagCount > 99 ? "99+" : bagCount}
+            </span>
+          ) : null}
+        </button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-lg">
+
+      <SheetContent className="flex w-full flex-col sm:max-w-md">
         <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
+          <SheetTitle className="flex items-center gap-2 text-[#083b6c]">
             <ShoppingBag className="h-5 w-5" />
-            Your Cart ({cart.totalItems} {cart.totalItems === 1 ? 'item' : 'items'})
+            Your Cart ({bagCount} {bagCount === 1 ? "item" : "items"})
           </SheetTitle>
-          <SheetDescription>
-            Review your beach rental selection
-          </SheetDescription>
+          <SheetDescription>Review food and continue to packages or checkout.</SheetDescription>
         </SheetHeader>
 
-        <div className="flex flex-col h-full mt-6">
-          {cart.items.length === 0 ? (
-            <EmptyCart onClose={() => setOpen(false)} />
+        <div className="mt-6 flex min-h-0 flex-1 flex-col">
+          {bagCount === 0 ? (
+            <div className="flex flex-1 flex-col items-center justify-center py-10 text-center">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#fff4e8]">
+                <ShoppingBag className="h-8 w-8 text-[#083b6c]" />
+              </div>
+              <h3 className="mb-2 text-lg font-semibold text-[#083b6c]">Your cart is empty</h3>
+              <p className="mb-6 max-w-sm text-sm text-muted-foreground">
+                Add beach packages or food from local partners to get started with your perfect beach day.
+              </p>
+              <div className="flex w-full max-w-xs flex-col gap-2">
+                <Button
+                  className="rounded-full bg-[#083b6c] hover:bg-[#0a4a85]"
+                  onClick={() => go("/#services")}
+                >
+                  Browse Packages
+                </Button>
+                <Button variant="outline" className="rounded-full" onClick={() => go("/food")}>
+                  Browse Food & Drinks
+                </Button>
+              </div>
+            </div>
           ) : (
             <>
-              <div className="flex-1 space-y-4 overflow-y-auto">
-                {cart.items.map((item: CartItemType)=> (
-                  <CartItem key={item.id} item={item} />
+              <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  Food & drinks
+                </p>
+                {lines.map((line) => (
+                  <div
+                    key={line.key}
+                    className="flex gap-3 rounded-2xl border border-border bg-white p-3 shadow-soft"
+                  >
+                    <img
+                      src={line.image}
+                      alt=""
+                      className="h-16 w-16 shrink-0 rounded-xl object-cover"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="truncate font-semibold text-[#083b6c]">{line.name}</p>
+                          <p className="text-xs text-muted-foreground">{line.restaurantName}</p>
+                        </div>
+                        <p className="shrink-0 text-sm font-bold text-[#083b6c]">
+                          ${(line.price * line.quantity).toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="mt-2 flex items-center gap-2">
+                        <button
+                          type="button"
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-border hover:bg-muted"
+                          onClick={() => setQty(line.key, line.quantity - 1)}
+                          aria-label="Decrease quantity"
+                        >
+                          {line.quantity <= 1 ? (
+                            <Trash2 className="h-3.5 w-3.5 text-muted-foreground" />
+                          ) : (
+                            <Minus className="h-3.5 w-3.5" />
+                          )}
+                        </button>
+                        <span className="w-6 text-center text-sm font-bold">{line.quantity}</span>
+                        <button
+                          type="button"
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-border hover:bg-muted"
+                          onClick={() => setQty(line.key, line.quantity + 1)}
+                          aria-label="Increase quantity"
+                        >
+                          <Plus className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
 
-              <div className="space-y-4 pt-4 border-t">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Subtotal</span>
-                    <span>${cart.totalAmount}</span>
-                  </div>
-                  <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>Delivery & Setup</span>
-                    <span>Included</span>
-                  </div>
-                  <Separator />
-                  <div className="flex justify-between font-medium">
-                    <span>Total</span>
-                    <span>${cart.totalAmount}</span>
-                  </div>
+              <div className="mt-4 space-y-3 border-t border-border pt-4">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Food subtotal</span>
+                  <span className="font-semibold text-[#083b6c]">${subtotal.toFixed(2)}</span>
                 </div>
-
-                <div className="space-y-2">
-                  <Button onClick={handleCheckout} className="w-full bg-ocean-light hover:bg-ocean-deep">
-                    Book Now
-                  </Button>
-                  <Button onClick={handleViewCart} variant="outline" className="w-full">
-                    View Full Cart
-                  </Button>
-                </div>
+                <Separator />
+                <Button
+                  className="w-full rounded-full bg-[#083b6c] hover:bg-[#0a4a85]"
+                  onClick={() => go("/food/checkout")}
+                >
+                  Checkout food
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full rounded-full border-[#083b6c] text-[#083b6c]"
+                  onClick={() => go("/#services")}
+                >
+                  Add beach packages
+                </Button>
+                <p className="text-center text-xs text-muted-foreground">
+                  Packages + food can checkout together in booking.{" "}
+                  <Link
+                    href="/booking"
+                    className="font-semibold text-[#3b82b6] underline-offset-2 hover:underline"
+                    onClick={() => setOpen(false)}
+                  >
+                    Continue to booking
+                  </Link>
+                </p>
               </div>
             </>
           )}
