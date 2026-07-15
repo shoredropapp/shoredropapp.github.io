@@ -4,8 +4,13 @@ import Link from "next/link";
 import { Card, CardContent } from "./card";
 import { Button } from "./button";
 import { CUSTOM_GEAR, PACKAGES, getPackageStartingFrom } from "../lib/ordering/catalog";
+import { useFoodBagOptional } from "../contexts/FoodBagContext";
 
 const Services = () => {
+  const foodBag = useFoodBagOptional();
+  const foodCount = foodBag?.bagCount ?? 0;
+  const foodTotal = foodBag?.subtotal ?? 0;
+
   return (
     <section className="py-24" style={{ backgroundColor: "#FFF7EE" }}>
       <div className="container mx-auto px-4">
@@ -17,6 +22,12 @@ const Services = () => {
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
             Tiered pricing by time of day — starting from half-day rates. Book online or in the app.
           </p>
+          {foodCount > 0 ? (
+            <p className="mx-auto mt-4 max-w-xl rounded-2xl border border-[#083b6c]/20 bg-white/80 px-4 py-3 text-sm text-[#083b6c]">
+              You have {foodCount} food item{foodCount === 1 ? "" : "s"} in your bag (${foodTotal.toFixed(2)}). Select a
+              package below — food stays in your order through checkout.
+            </p>
+          ) : null}
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

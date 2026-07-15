@@ -120,6 +120,19 @@ export function resolvePricingSlotId(startTimeLabel: string, durationHours: numb
   return HALF_DAY_START_TO_SLOT[startTimeLabel.trim()] ?? "half-9-12";
 }
 
+/** Afternoon starts (11:00 AM+) use premium half-day package tiers — same as Cap app. */
+export function isPremiumSetupStart(startTimeLabel: string): boolean {
+  const preset = startTimeLabel.trim();
+  return (
+    preset === "11:00 AM" ||
+    preset === "12:00 PM" ||
+    preset === "1:00 PM" ||
+    preset === "2:00 PM" ||
+    preset === "3:00 PM" ||
+    preset === "4:00 PM"
+  );
+}
+
 /** Custom gear — half-day display prices (à la carte). */
 export const CUSTOM_GEAR = [
   { id: "beach-chair", name: "Beach Chair", price: 11.99, image: "/assets/items/beach-chair.png" },

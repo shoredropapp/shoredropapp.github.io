@@ -40,20 +40,20 @@ const SiteNav = () => {
             Mission
           </Link>
           <Link
-            href="/booking"
+            href="/#services"
             className="rounded-full p-2 text-[#083b6c] hover:bg-[#e6f9ff]"
-            aria-label="Book / cart"
+            aria-label="Beach packages"
           >
             <ShoppingBag className="h-5 w-5" />
           </Link>
           <Button asChild size="sm" className="rounded-full bg-[#083b6c] px-5 hover:bg-[#0a4a85]">
-            <Link href="/booking">Book Now</Link>
+            <Link href="/#services">Book Now</Link>
           </Button>
         </div>
 
         <div className="ml-auto flex items-center gap-2 md:hidden">
           <Button asChild size="sm" className="rounded-full bg-[#083b6c] hover:bg-[#0a4a85]">
-            <Link href="/booking">Book Now</Link>
+            <Link href="/#services">Book Now</Link>
           </Button>
         </div>
       </div>

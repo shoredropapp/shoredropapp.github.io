@@ -2,27 +2,28 @@
 
 import Link from "next/link";
 import { Button } from "./button";
-import { Phone, ArrowRight, Star, Check } from "lucide-react";
+import { ArrowRight, Star, Check } from "lucide-react";
 
-/** Keep the current homepage photo — only layout/copy follow Lovable. */
+/** Keep the current homepage photo — layout matches Lovable proportions. */
 const HERO_IMAGE = "/lovable-uploads/8cb1bdbc-787a-463c-9ad8-13203c8d57fa.png";
 
 const Hero = () => {
   return (
-    <section className="bg-hero-gradient pt-24 pb-16 lg:pt-28 lg:pb-20">
+    <section className="bg-hero-gradient pt-24 pb-14 lg:pt-28 lg:pb-20">
       <div className="container mx-auto px-4">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          <div className="space-y-7">
-            <span className="inline-flex items-center rounded-full border border-[#bbefff] bg-white/80 px-3 py-1 text-xs font-semibold tracking-wide text-[#083b6c]">
+        {/* ~42% copy / ~58% image, top-aligned like Lovable (not vertically centered) */}
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.18fr)] lg:gap-12 xl:gap-16">
+          <div className="flex flex-col justify-start space-y-6 lg:pt-6 xl:pt-10">
+            <span className="inline-flex w-fit items-center rounded-full border border-[#bbefff] bg-white/80 px-3 py-1 text-xs font-semibold tracking-wide text-[#083b6c]">
               Live in Virginia Beach · Summer 2026
             </span>
 
             <div className="space-y-4">
-              <h1 className="text-5xl font-semibold leading-[1.08] tracking-tight text-[#083b6c] sm:text-6xl lg:text-7xl">
+              <h1 className="max-w-[14ch] text-[2.75rem] font-semibold leading-[1.05] tracking-tight text-[#083b6c] sm:text-5xl lg:text-[3.5rem] xl:text-6xl">
                 Your Beach Day,
                 <span className="block">Delivered.</span>
               </h1>
-              <p className="max-w-lg text-lg leading-relaxed text-muted-foreground">
+              <p className="max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
                 Premium beach gear set up before you arrive — plus local meals from Waterman&apos;s delivered
                 right to your towel.
               </p>
@@ -34,10 +35,7 @@ const Hero = () => {
                 size="lg"
                 className="rounded-full bg-[#083b6c] px-8 py-6 text-base text-white hover:bg-[#0a4a85]"
               >
-                <Link href="/booking">
-                  <Phone className="mr-2 h-5 w-5" />
-                  Book Your Beach Day
-                </Link>
+                <Link href="/#services">Book Your Beach Day</Link>
               </Button>
               <button
                 type="button"
@@ -51,7 +49,7 @@ const Hero = () => {
               </button>
             </div>
 
-            <ul className="grid gap-2 text-sm text-[#083b6c]/90 sm:grid-cols-1">
+            <ul className="space-y-2 text-sm text-[#083b6c]/90">
               {[
                 "Coverage along 42nd–86th Street",
                 "Setup before you arrive · pack-up after",
@@ -65,16 +63,16 @@ const Hero = () => {
             </ul>
           </div>
 
-          <div className="relative mx-auto w-full max-w-xl">
-            <div className="absolute inset-0 translate-x-3 translate-y-3 rounded-[2rem] bg-[#bbefff]/40 blur-2xl" />
+          <div className="relative w-full lg:max-w-none">
+            <div className="absolute inset-0 translate-x-2 translate-y-2 rounded-[2rem] bg-[#bbefff]/35 blur-2xl lg:translate-x-3 lg:translate-y-3" />
             <div className="relative overflow-hidden rounded-[1.75rem] bg-white shadow-wave ring-1 ring-black/5">
               <img
                 src={HERO_IMAGE}
                 alt="ShoreDrop beach setup with chairs, umbrella, and cooler"
-                className="aspect-[4/5] w-full object-cover object-center sm:aspect-[5/4]"
+                className="aspect-[4/5] w-full object-cover object-[center_40%] sm:aspect-[3/4] lg:min-h-[34rem] xl:min-h-[38rem]"
               />
             </div>
-            <div className="absolute -bottom-4 left-4 hidden items-center gap-2 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-soft backdrop-blur sm:flex">
+            <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-2xl border border-white/60 bg-white/95 px-4 py-3 shadow-soft backdrop-blur">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-100">
                 <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
               </div>

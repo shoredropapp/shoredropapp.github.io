@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { Check } from "lucide-react";
 import { Button } from "../../../components/button";
+import SiteNav from "../../../components/SiteNav";
 
 function ConfirmationInner() {
   const search = useSearchParams();
@@ -12,8 +13,10 @@ function ConfirmationInner() {
   const eta = search.get("eta") ?? "Ready in ~45 min";
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[hsl(200,20%,98%)] px-4">
-      <div className="w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-wave">
+    <div className="min-h-screen bg-[hsl(200,20%,98%)] px-4 pt-28 pb-16">
+      <SiteNav />
+      <div className="mx-auto flex w-full max-w-md flex-col items-center justify-center">
+      <div className="w-full rounded-3xl bg-white p-8 text-center shadow-wave">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
           <Check className="h-8 w-8 text-emerald-600" />
         </div>
@@ -27,9 +30,13 @@ function ConfirmationInner() {
             <Link href="/">Back to home</Link>
           </Button>
           <Button asChild variant="outline" className="rounded-full">
+            <Link href="/#services">Add beach packages</Link>
+          </Button>
+          <Button asChild variant="outline" className="rounded-full">
             <Link href="/food">Order more food</Link>
           </Button>
         </div>
+      </div>
       </div>
     </div>
   );

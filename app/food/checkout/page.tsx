@@ -4,10 +4,10 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startOfDay } from "date-fns";
-import { ArrowLeft } from "lucide-react";
 import { Button } from "../../../components/button";
 import { Input } from "../../../components/input";
 import { Label } from "../../../components/label";
+import SiteNav from "../../../components/SiteNav";
 import { cn } from "../../../lib/utils";
 import {
   FOOD_ASAP_ETA_LABEL,
@@ -87,18 +87,22 @@ export default function FoodCheckoutPage() {
 
   if (!lines.length) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-3 px-4">
-        <p className="text-muted-foreground">Your bag is empty.</p>
-        <Button asChild className="rounded-full">
-          <Link href="/food">Browse food</Link>
-        </Button>
+      <div className="min-h-screen bg-[hsl(200,20%,98%)]">
+        <SiteNav />
+        <div className="flex flex-col items-center justify-center gap-3 px-4 pt-32">
+          <p className="text-muted-foreground">Your bag is empty.</p>
+          <Button asChild className="rounded-full">
+            <Link href="/food">Browse food</Link>
+          </Button>
+        </div>
       </div>
     );
   }
 
   if (authInitialized && authRequiredMode && !authUser) {
     return (
-      <div className="min-h-screen bg-[hsl(200,20%,98%)] px-4 py-16">
+      <div className="min-h-screen bg-[hsl(200,20%,98%)] px-4 pt-28 pb-16">
+        <SiteNav />
         <div className="mb-8 text-center">
           <Link href="/food" className="text-sm font-semibold text-[#3b82b6] hover:underline">
             ← Back to food
@@ -187,17 +191,33 @@ export default function FoodCheckoutPage() {
 
   return (
     <div className="min-h-screen bg-[hsl(200,20%,98%)]">
-      <header className="sticky top-0 z-30 border-b border-border/50 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-3">
-          <Link href={`/food/${restaurant?.id ?? "watermans"}`} className="rounded-full p-2 hover:bg-muted">
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-          <p className="font-bold text-[#083b6c]">Food checkout</p>
-        </div>
-      </header>
+      <SiteNav />
 
-      <main className="mx-auto grid max-w-5xl gap-8 px-4 py-8 lg:grid-cols-[1.2fr_0.8fr]">
+      <main className="mx-auto grid max-w-5xl gap-8 px-4 pb-16 pt-28 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold text-[#083b6c]">Food checkout</h1>
+              <Link
+                href={`/food/${restaurant?.id ?? "watermans"}`}
+                className="text-sm font-semibold text-[#3b82b6] hover:underline"
+              >
+                ← Back to menu
+              </Link>
+            </div>
+            <Button asChild variant="outline" className="rounded-full border-[#083b6c] text-[#083b6c]">
+              <Link href="/#services">Add beach packages</Link>
+            </Button>
+          </div>
+
+          <div className="rounded-2xl border border-[#083b6c]/20 bg-[#e6f9ff]/70 px-4 py-3 text-sm text-[#083b6c]">
+            Want chairs & shade too?{" "}
+            <Link href="/#services" className="font-semibold underline underline-offset-2">
+              Add a package
+            </Link>
+            , then checkout gear + food together in booking — your food bag is saved.
+          </div>
+
           {!windowOpen ? (
             <p className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm">
               Food ordering is closed right now. Open {FOOD_SCHEDULE_LABEL}.

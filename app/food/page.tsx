@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Star } from "lucide-react";
+import { Star } from "lucide-react";
+import SiteNav from "../../components/SiteNav";
+import SiteFooter from "../../components/SiteFooter";
 import { FOOD_RESTAURANTS, FOOD_SCHEDULE_LABEL } from "../../lib/ordering/catalog";
 
 export const metadata: Metadata = {
@@ -12,27 +14,21 @@ export const metadata: Metadata = {
 export default function FoodPage() {
   return (
     <div className="min-h-screen bg-[hsl(200,20%,98%)]">
-      <header className="sticky top-0 z-30 border-b border-border/50 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-3">
-          <Link href="/" className="rounded-full p-2 hover:bg-muted" aria-label="Home">
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-          <img
-            src="/lovable-uploads/dbf79a37-c86d-49c9-af90-9fe7b44058fc.jpg"
-            alt=""
-            className="h-8 w-8 rounded-full"
-          />
-          <span className="font-bold text-[#083b6c]">ShoreDrop</span>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-3xl px-4 py-10">
+      <SiteNav />
+      <main className="mx-auto max-w-3xl px-4 pb-16 pt-28">
         <span className="inline-flex rounded-full bg-amber-400 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[#083b6c]">
           New · Local partners
         </span>
         <h1 className="mt-4 text-4xl font-semibold text-[#083b6c]">Beach Bites, delivered to your setup.</h1>
         <p className="mt-2 text-muted-foreground">
           Ordering open {FOOD_SCHEDULE_LABEL}. Same prices as the app.
+        </p>
+        <p className="mt-3 text-sm text-[#083b6c]/80">
+          Add food to your bag, then add{" "}
+          <Link href="/#services" className="font-semibold underline underline-offset-2">
+            beach packages
+          </Link>{" "}
+          and checkout together — or order food alone.
         </p>
 
         <div className="mt-8 space-y-4">
@@ -61,6 +57,7 @@ export default function FoodPage() {
           ))}
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }

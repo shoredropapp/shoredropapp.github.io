@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { Button } from "../button";
+import SiteNav from "../SiteNav";
 import { getFoodRestaurant } from "../../lib/ordering/catalog";
 import { useFoodBag } from "../../contexts/FoodBagContext";
 import { toast } from "sonner";
@@ -22,7 +22,8 @@ export default function FoodMenuClient({ restaurantId }: { restaurantId: string 
 
   if (!restaurant) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-3 px-4">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 px-4 pt-28">
+        <SiteNav />
         <p>Restaurant not found.</p>
         <Link href="/food" className="text-[#3b82b6] underline">
           Back to food
@@ -34,19 +35,16 @@ export default function FoodMenuClient({ restaurantId }: { restaurantId: string 
   const sections = Array.from(new Set(restaurant.menu.map((m) => m.section)));
 
   return (
-    <div className="min-h-screen bg-[hsl(200,20%,98%)] pb-28">
-      <div className="relative h-48 overflow-hidden bg-[#083b6c]">
-        <img src={restaurant.heroImage} alt="" className="h-full w-full object-cover opacity-80" />
-        <Link
-          href="/food"
-          className="absolute left-4 top-4 rounded-full bg-white/90 p-2 shadow"
-          aria-label="Back"
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </Link>
+    <div className="min-h-screen bg-[hsl(200,20%,98%)] pb-32">
+      <SiteNav />
+
+      {/* Hero sits below fixed site nav so nothing is clipped */}
+      <div className="relative mt-[4.5rem] h-52 overflow-hidden bg-[#083b6c] sm:h-64">
+        <img src={restaurant.heroImage} alt="" className="h-full w-full object-cover object-center opacity-90" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
       </div>
 
-      <main className="mx-auto max-w-3xl px-4 -mt-8">
+      <main className="relative z-10 mx-auto max-w-3xl px-4 -mt-10">
         <div className="rounded-3xl bg-white p-5 shadow-wave">
           <div className="flex items-start gap-3">
             <img src={restaurant.logoImage} alt="" className="h-14 w-14 rounded-xl object-contain" />
@@ -55,6 +53,9 @@ export default function FoodMenuClient({ restaurantId }: { restaurantId: string 
               <p className="text-sm text-muted-foreground">
                 {restaurant.etaLabel} · Min ${restaurant.minimumOrder.toFixed(2)}
               </p>
+              <Link href="/food" className="mt-1 inline-block text-xs font-semibold text-[#3b82b6] hover:underline">
+                ← All food partners
+              </Link>
             </div>
           </div>
         </div>
@@ -137,18 +138,23 @@ export default function FoodMenuClient({ restaurantId }: { restaurantId: string 
 
       {bagCount > 0 ? (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-white/95 p-4 backdrop-blur">
-          <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
+          <div className="mx-auto flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-bold text-[#083b6c]">
                 {bagCount} items · ${bagSubtotal.toFixed(2)}
               </p>
               <p className="text-xs text-muted-foreground">
-                + ${restaurant.deliveryFee.toFixed(2)} delivery at checkout
+                + ${restaurant.deliveryFee.toFixed(2)} food delivery at checkout
               </p>
             </div>
-            <Button asChild className="rounded-full bg-[#083b6c] px-6">
-              <Link href="/food/checkout">View bag</Link>
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline" className="rounded-full border-[#083b6c] text-[#083b6c]">
+                <Link href="/#services">Add packages</Link>
+              </Button>
+              <Button asChild className="rounded-full bg-[#083b6c] px-6">
+                <Link href="/food/checkout">View bag</Link>
+              </Button>
+            </div>
           </div>
         </div>
       ) : null}
