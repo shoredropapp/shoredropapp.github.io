@@ -51,7 +51,8 @@ function InnerForm({
       options={{
         layout: "tabs",
         paymentMethodOrder: ["card"],
-        wallets: { applePay: "auto", googlePay: "auto", link: "never" },
+        /** Card fields only — Klarna / Affirm / wallets are disabled. */
+        wallets: { applePay: "never", googlePay: "never", link: "never" },
       }}
     />
   );
@@ -80,6 +81,8 @@ export default function StripeCardForm({
         mode: "payment",
         amount: Math.max(50, amountCents),
         currency: "usd",
+        /** Explicit card-only — stops Klarna / Affirm / other BNPL from appearing. */
+        paymentMethodTypes: ["card"],
         appearance: { theme: "stripe", variables: { borderRadius: "12px", fontSizeBase: "16px" } },
       }}
     >
