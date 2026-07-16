@@ -165,6 +165,18 @@ export default function PrivacyPage() {
               <li>Right to Opt Out — opt out of targeted advertising, sale of personal data, or certain profiling</li>
               <li>Right to Appeal — appeal our decision if we deny your request</li>
             </ul>
+            <p className="mb-2">
+              Signed-in ShoreDrop accounts: You can permanently delete your account anytime in the app under{" "}
+              <span className="font-medium text-foreground">Profile → Delete account</span>, or request deletion
+              without the app at{" "}
+              <a
+                href="/delete-account"
+                className="text-ocean-deep font-medium underline underline-offset-2 hover:text-ocean-light transition-colors"
+              >
+                shoredropapp.com/delete-account
+              </a>
+              . This removes your login and anonymizes identifiable information on past orders tied to your account.
+            </p>
             <p className="mb-2">To exercise your rights, contact us using the information below.</p>
             <p className="mb-2">
               We will respond within 45 days, with a possible extension of an additional 45 days where permitted by law.

@@ -99,6 +99,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
     {
+      url: `${BASE}/delete-account`,
+      lastModified: "2026-07-15",
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
       url: `${BASE}/terms`,
       lastModified: "2026-04-22",
       changeFrequency: "yearly",
