@@ -6,6 +6,8 @@ export type SavedWebOrder = {
   id: string;
   trackingToken: string;
   title: string;
+  /** Expanded lines: package name, includes, add-ons, food rows. */
+  detailLines?: string[];
   locationLabel?: string;
   serviceDateLabel?: string;
   startTime?: string;

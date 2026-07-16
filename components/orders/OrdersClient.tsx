@@ -34,6 +34,7 @@ type DisplayOrder = {
   id: string;
   trackingToken: string;
   title: string;
+  detailLines: string[];
   locationLabel: string;
   serviceDateLabel: string;
   startTime: string;
@@ -55,6 +56,7 @@ function mergeOrders(local: SavedWebOrder[], cloud: CloudOrderSummary[]): Displa
       id: o.id,
       trackingToken: o.trackingToken,
       title: o.title,
+      detailLines: o.detailLines ?? [],
       locationLabel: o.locationLabel || "Virginia Beach",
       serviceDateLabel: o.serviceDateLabel || "",
       startTime: o.startTime || "",
@@ -69,10 +71,13 @@ function mergeOrders(local: SavedWebOrder[], cloud: CloudOrderSummary[]): Displa
   }
   for (const c of cloud) {
     const prev = map.get(c.id);
+    const detailLines =
+      c.detailLines?.length > 0 ? c.detailLines : prev?.detailLines?.length ? prev.detailLines : [];
     map.set(c.id, {
       id: c.id,
       trackingToken: c.trackingToken || prev?.trackingToken || "",
       title: c.title || prev?.title || "Order",
+      detailLines,
       locationLabel: c.locationLabel || prev?.locationLabel || "Virginia Beach",
       serviceDateLabel: c.serviceDateLabel || prev?.serviceDateLabel || "",
       startTime: c.startTime || prev?.startTime || "",
@@ -121,6 +126,7 @@ export default function OrdersClient() {
             id: c.id,
             trackingToken: c.trackingToken,
             title: c.title,
+            detailLines: c.detailLines,
             locationLabel: c.locationLabel,
             serviceDateLabel: c.serviceDateLabel,
             startTime: c.startTime,
@@ -390,7 +396,19 @@ function OrderCard({
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="font-bold text-[#083b6c]">{order.title}</p>
-          <p className="text-sm text-muted-foreground">
+          {order.detailLines.length > 0 ? (
+            <ul className="mt-2 space-y-0.5 text-sm text-muted-foreground">
+              {order.detailLines.map((line, i) => {
+                const isPrimary = /^\d+×\s/.test(line);
+                return (
+                  <li key={`${line}-${i}`} className={cn(isPrimary ? "font-medium text-[#083b6c]" : "pl-3")}>
+                    {isPrimary ? line : `· ${line}`}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : null}
+          <p className="mt-2 text-sm text-muted-foreground">
             {order.serviceDateLabel}
             {order.startTime ? ` · ${order.startTime}` : ""}
             {order.endTime ? ` – ${order.endTime}` : ""}

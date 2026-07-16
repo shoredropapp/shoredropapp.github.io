@@ -186,6 +186,7 @@ export default function FoodCheckoutPage() {
           id: orderId,
           trackingToken,
           title: restaurant?.name ? `${restaurant.name} food` : "Food & drinks",
+          detailLines: lines.map((l) => `${l.quantity}× ${l.name}`),
           locationLabel: location.displayName,
           serviceDateLabel: "Today",
           startTime: selectedStart,

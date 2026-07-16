@@ -13,6 +13,10 @@ export type OrderLineItem = {
   price: number;
   quantity: number;
   catalogPackageId?: string;
+  /** What’s included in a package (or custom setup summary lines). */
+  includes?: string[];
+  /** Extra gear / games attached to a package line. */
+  addOns?: Array<{ name: string; quantity: number; price?: number; catalogAddonId?: string }>;
   foodRestaurantId?: string;
   foodRestaurantName?: string;
   metadata?: Record<string, unknown>;
@@ -89,6 +93,8 @@ export async function placeOrderAndDispatch(input: {
       catalogPackageId: item.catalogPackageId ?? null,
       foodRestaurantId: item.foodRestaurantId ?? null,
       foodRestaurantName: item.foodRestaurantName ?? null,
+      includes: item.includes ?? [],
+      addOns: item.addOns ?? [],
       ...(item.metadata ?? {}),
     },
   }));

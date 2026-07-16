@@ -244,6 +244,7 @@ export default function BookingClient() {
                 price: gearMerchandise,
                 quantity: 1,
                 catalogPackageId: packageId,
+                includes: [...pkg.items],
               },
             ]
           : Object.entries(customQty)
@@ -270,6 +271,15 @@ export default function BookingClient() {
       }));
 
       const items = [...gearItems, ...foodItems];
+      const detailLines = [
+        ...gearItems.flatMap((g) => {
+          if (g.type === "package") {
+            return [`1× ${g.name}`, ...(g.includes ?? [])];
+          }
+          return [`${g.quantity}× ${g.name}`];
+        }),
+        ...foodItems.map((l) => `${l.quantity}× ${l.name}`),
+      ];
 
       const { orderId, trackingToken, dispatchNotified } = await placeOrderAndDispatch({
         customerName: name.trim(),
@@ -295,6 +305,7 @@ export default function BookingClient() {
           id: orderId,
           trackingToken,
           title: mode === "package" ? pkg.name : foodLines.length ? "Beach setup + food" : "Custom beach setup",
+          detailLines,
           locationLabel: location.displayName,
           serviceDateLabel: format(serviceDate, "EEE, MMM d"),
           startTime,
@@ -731,10 +742,30 @@ export default function BookingClient() {
         {step === 4 ? (
           <div className="space-y-5">
             <h2 className="text-2xl font-semibold text-[#083b6c]">Review & pay</h2>
-            <div className="rounded-2xl border border-border bg-white p-4 text-sm space-y-2">
+            <div className="space-y-2 rounded-2xl border border-border bg-white p-4 text-sm">
               <p className="font-semibold text-[#083b6c]">
                 {mode === "package" ? pkg.name : "Custom setup"} · {durationHours}h · ${gearMerchandise.toFixed(2)}
               </p>
+              {mode === "package" ? (
+                <ul className="space-y-0.5 text-muted-foreground">
+                  {pkg.items.map((item) => (
+                    <li key={item}>· {item}</li>
+                  ))}
+                </ul>
+              ) : (
+                <ul className="space-y-0.5 text-muted-foreground">
+                  {Object.entries(customQty)
+                    .filter(([, q]) => q > 0)
+                    .map(([sku, q]) => {
+                      const gear = CUSTOM_GEAR.find((g) => g.id === sku);
+                      return (
+                        <li key={sku}>
+                          · {q}× {gear?.name ?? sku}
+                        </li>
+                      );
+                    })}
+                </ul>
+              )}
               <p className="text-muted-foreground">
                 {serviceDate ? format(serviceDate, "EEE, MMM d") : ""} · {startTime} – {endTime}
               </p>

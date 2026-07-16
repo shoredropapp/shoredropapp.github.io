@@ -6,6 +6,7 @@ import {
   getUserFunctionHeaders,
   isSupabaseConfigured,
 } from "./supabase";
+import { orderDetailBullets, type StoredOrderItemLike } from "../ordering/orderItemDisplay";
 
 export type OrderStatus =
   | "confirmed"
@@ -47,6 +48,7 @@ export type CloudOrderSummary = {
   trackingToken: string;
   status: OrderStatus;
   title: string;
+  detailLines: string[];
   locationLabel: string;
   serviceDateLabel: string;
   startTime: string;
@@ -128,7 +130,7 @@ type CloudRow = {
   total_amount?: number | null;
   created_at?: string | null;
   driver_claim_user_id?: string | null;
-  items?: Array<{ item_type?: string; item_name?: string; quantity?: number }>;
+  items?: StoredOrderItemLike[];
 };
 
 export async function fetchCustomerCloudOrders(accessToken: string): Promise<CloudOrderSummary[]> {
@@ -156,11 +158,13 @@ export async function fetchCustomerCloudOrders(accessToken: string): Promise<Clo
                 .filter(Boolean)
                 .slice(0, 3)
                 .join(", ") || "Beach setup";
+      const detailLines = orderDetailBullets(items);
       return {
         id: row.id,
         trackingToken: token,
         status: parseOrderStatus(row.status),
         title,
+        detailLines,
         locationLabel: row.location_display_name?.trim() || "Virginia Beach",
         serviceDateLabel: row.service_date || "",
         startTime: row.start_time || "",
