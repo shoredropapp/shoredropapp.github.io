@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Check, MessageCircle, Package } from "lucide-react";
+import { Check, Clock, MessageCircle, Package } from "lucide-react";
 import SiteNav from "../SiteNav";
 import SiteFooter from "../SiteFooter";
 import { Button } from "../button";
@@ -29,6 +29,11 @@ import {
   rememberWebOrder,
   type SavedWebOrder,
 } from "../../lib/ordering/webOrders";
+import {
+  canOfferOrderExtension,
+  parseServiceDateLabel,
+} from "../../lib/ordering/orderExtension";
+import ExtendOrderTimeModal from "./ExtendOrderTimeModal";
 
 type DisplayOrder = {
   id: string;
@@ -104,6 +109,7 @@ export default function OrdersClient() {
   const [orders, setOrders] = useState<DisplayOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [chatOrderId, setChatOrderId] = useState<string | null>(null);
+  const [extendOrderId, setExtendOrderId] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
 
@@ -182,6 +188,11 @@ export default function OrdersClient() {
               typeof snap.order.location_display_name === "string" && snap.order.location_display_name
                 ? snap.order.location_display_name
                 : undefined,
+            endTime: typeof snap.order.end_time === "string" ? snap.order.end_time : undefined,
+            totalAmount:
+              typeof snap.order.total_amount === "number"
+                ? snap.order.total_amount
+                : Number(snap.order.total_amount) || undefined,
           };
         }),
       );
@@ -198,6 +209,8 @@ export default function OrdersClient() {
             setupPhotoUrl: u.setupPhotoUrl || o.setupPhotoUrl,
             foodEta: u.foodEta || o.foodEta,
             locationLabel: u.locationLabel || o.locationLabel,
+            endTime: u.endTime || o.endTime,
+            totalAmount: u.totalAmount && u.totalAmount > 0 ? u.totalAmount : o.totalAmount,
           };
         }),
       );
@@ -214,6 +227,22 @@ export default function OrdersClient() {
   const active = useMemo(() => orders.filter((o) => !isPastStatus(o.status)), [orders]);
   const past = useMemo(() => orders.filter((o) => isPastStatus(o.status)), [orders]);
   const chatOrder = orders.find((o) => o.id === chatOrderId) ?? null;
+  const extendOrder = orders.find((o) => o.id === extendOrderId) ?? null;
+
+  const handleOrderExtended = (orderId: string, endTime: string, totalAmount: number) => {
+    setOrders((prev) =>
+      prev.map((o) =>
+        o.id === orderId
+          ? { ...o, endTime, totalAmount }
+          : o,
+      ),
+    );
+    const local = readSavedWebOrders().find((o) => o.id === orderId);
+    if (local) {
+      rememberWebOrder({ ...local, endTime, totalAmount });
+    }
+    setExtendOrderId(null);
+  };
 
   const sendChat = async () => {
     if (!chatOrder || !draft.trim()) return;
@@ -297,7 +326,12 @@ export default function OrdersClient() {
               <section className="space-y-4">
                 <h2 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">Active</h2>
                 {active.map((o) => (
-                  <OrderCard key={o.id} order={o} onChat={() => setChatOrderId(o.id)} />
+                  <OrderCard
+                    key={o.id}
+                    order={o}
+                    onChat={() => setChatOrderId(o.id)}
+                    onExtend={() => setExtendOrderId(o.id)}
+                  />
                 ))}
               </section>
             ) : null}
@@ -373,6 +407,24 @@ export default function OrdersClient() {
         </div>
       ) : null}
 
+      <ExtendOrderTimeModal
+        open={extendOrder !== null}
+        onClose={() => setExtendOrderId(null)}
+        order={
+          extendOrder
+            ? {
+                id: extendOrder.id,
+                trackingToken: extendOrder.trackingToken,
+                endTime: extendOrder.endTime,
+                serviceDateLabel: extendOrder.serviceDateLabel,
+                status: extendOrder.status,
+                foodOnly: extendOrder.foodOnly,
+              }
+            : null
+        }
+        onExtended={handleOrderExtended}
+      />
+
       <SiteFooter />
     </div>
   );
@@ -381,13 +433,25 @@ export default function OrdersClient() {
 function OrderCard({
   order,
   onChat,
+  onExtend,
   compact,
 }: {
   order: DisplayOrder;
   onChat: () => void;
+  onExtend?: () => void;
   compact?: boolean;
 }) {
   const steps = getStatusSteps(order.status, order.foodOnly);
+  const serviceDate = parseServiceDateLabel(order.serviceDateLabel);
+  const canExtend =
+    Boolean(onExtend) &&
+    Boolean(serviceDate) &&
+    canOfferOrderExtension({
+      foodOnly: order.foodOnly,
+      status: order.status,
+      endTime: order.endTime,
+      serviceDate: serviceDate ?? new Date(),
+    }).ok;
   return (
     <div
       id={`order-${order.id}`}
@@ -466,6 +530,12 @@ function OrderCard({
             <span className="ml-1.5 rounded-full bg-white/20 px-1.5 text-[10px]">{order.messages.length}</span>
           ) : null}
         </Button>
+        {canExtend ? (
+          <Button type="button" variant="outline" className="rounded-full border-[#083b6c] text-[#083b6c]" onClick={onExtend}>
+            <Clock className="mr-1.5 h-4 w-4" />
+            Add more beach time
+          </Button>
+        ) : null}
       </div>
     </div>
   );

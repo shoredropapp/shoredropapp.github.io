@@ -92,20 +92,104 @@ export function roundUsd2(n: number): number {
   return Math.round((Number(n) + Number.EPSILON) * 100) / 100;
 }
 
+/** Matches promo payload from Stripe (`create-payment-intent` validateOnly). */
+export type StripePromoLike =
+  | null
+  | {
+      percentOff?: number;
+      amountOffCents?: number;
+      description?: string;
+    };
+
+/**
+ * Apply promo to merchandise + delivery only (not tip / on-demand surcharge).
+ * Splits savings across subtotal vs delivery so order columns still balance.
+ */
+export function computePromoAgainstMerchandisePlusDelivery(params: {
+  merchandiseUsd: number;
+  deliveryFeeUsd: number;
+  promo: StripePromoLike;
+}): {
+  promoBaseUsd: number;
+  discountUsd: number;
+  netMerchandiseUsd: number;
+  netDeliveryFeeUsd: number;
+} {
+  const merchandiseUsd = Math.max(0, roundUsd2(params.merchandiseUsd));
+  const deliveryFeeUsd = Math.max(0, roundUsd2(params.deliveryFeeUsd));
+  const promoBaseUsd = roundUsd2(merchandiseUsd + deliveryFeeUsd);
+  const { promo } = params;
+
+  if (!promo) {
+    return {
+      promoBaseUsd,
+      discountUsd: 0,
+      netMerchandiseUsd: merchandiseUsd,
+      netDeliveryFeeUsd: deliveryFeeUsd,
+    };
+  }
+
+  let discountUsd = 0;
+  if (typeof promo.percentOff === "number" && promo.percentOff > 0) {
+    discountUsd = roundUsd2((promoBaseUsd * promo.percentOff) / 100);
+  } else if (typeof promo.amountOffCents === "number" && promo.amountOffCents > 0) {
+    discountUsd = roundUsd2(Math.min(promoBaseUsd, promo.amountOffCents / 100));
+  }
+
+  discountUsd = Math.min(discountUsd, promoBaseUsd);
+
+  if (discountUsd <= 0 || promoBaseUsd <= 0) {
+    return {
+      promoBaseUsd,
+      discountUsd: 0,
+      netMerchandiseUsd: merchandiseUsd,
+      netDeliveryFeeUsd: deliveryFeeUsd,
+    };
+  }
+
+  const discMerch = merchandiseUsd > 0 ? roundUsd2(discountUsd * (merchandiseUsd / promoBaseUsd)) : 0;
+  const discDeliv = roundUsd2(discountUsd - discMerch);
+
+  let netMerchandiseUsd = Math.max(0, roundUsd2(merchandiseUsd - discMerch));
+  let netDeliveryFeeUsd = Math.max(0, roundUsd2(deliveryFeeUsd - discDeliv));
+
+  const sumNet = roundUsd2(netMerchandiseUsd + netDeliveryFeeUsd);
+  const expectedNetBase = roundUsd2(promoBaseUsd - discountUsd);
+  if (sumNet !== expectedNetBase) {
+    netDeliveryFeeUsd = roundUsd2(netDeliveryFeeUsd + (expectedNetBase - sumNet));
+    if (netDeliveryFeeUsd < 0) {
+      netMerchandiseUsd = roundUsd2(netMerchandiseUsd + netDeliveryFeeUsd);
+      netDeliveryFeeUsd = 0;
+      netMerchandiseUsd = Math.max(0, netMerchandiseUsd);
+    }
+  }
+
+  return { promoBaseUsd, discountUsd, netMerchandiseUsd, netDeliveryFeeUsd };
+}
+
 export function computeCheckoutTotals(input: {
   merchandiseUsd: number;
   deliveryFeeUsd: number;
   onDemandSurchargeUsd: number;
   tipUsd: number;
+  promo?: StripePromoLike;
 }) {
-  const merchandiseUsd = roundUsd2(input.merchandiseUsd);
-  const deliveryFeeUsd = roundUsd2(input.deliveryFeeUsd);
-  const onDemandSurchargeUsd = roundUsd2(input.onDemandSurchargeUsd);
-  const tipUsd = roundUsd2(input.tipUsd);
+  const promoPart = computePromoAgainstMerchandisePlusDelivery({
+    merchandiseUsd: input.merchandiseUsd,
+    deliveryFeeUsd: input.deliveryFeeUsd,
+    promo: input.promo ?? null,
+  });
+  const orderTotalUsd = roundUsd2(
+    promoPart.netMerchandiseUsd +
+      promoPart.netDeliveryFeeUsd +
+      roundUsd2(input.onDemandSurchargeUsd) +
+      roundUsd2(input.tipUsd),
+  );
   return {
-    netMerchandiseUsd: merchandiseUsd,
-    netDeliveryFeeUsd: deliveryFeeUsd,
-    orderTotalUsd: roundUsd2(merchandiseUsd + deliveryFeeUsd + onDemandSurchargeUsd + tipUsd),
+    ...promoPart,
+    orderTotalUsd,
+    grossMerchandiseUsd: roundUsd2(input.merchandiseUsd),
+    grossDeliveryFeeUsd: roundUsd2(input.deliveryFeeUsd),
   };
 }
 

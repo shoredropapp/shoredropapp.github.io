@@ -25,17 +25,24 @@ import {
   formatBookingEndTime,
   isFoodDrinkOrderWindowOpen,
   parseBeachStartClock,
+  type StripePromoLike,
 } from "../../../lib/ordering/time";
 import { useFoodBag } from "../../../contexts/FoodBagContext";
 import StripeCardForm from "../../../components/checkout/StripeCardForm";
 import CustomerAuthPanel from "../../../components/auth/CustomerAuthPanel";
 import { useCustomerAuth } from "../../../contexts/CustomerAuthContext";
-import { createPaymentIntentClientSecret, isStripeConfigured } from "../../../lib/services/stripePayment";
+import {
+  createPaymentIntentClientSecret,
+  isStripeConfigured,
+  validateStripePromoCode,
+  type StripePromoResult,
+} from "../../../lib/services/stripePayment";
 import { isSupabaseConfigured } from "../../../lib/services/supabase";
 import { placeOrderAndDispatch } from "../../../lib/services/orderDispatch";
 import { CONTACT_PHONE_REQUIRED_MESSAGE, isValidContactPhone } from "../../../lib/ordering/phone";
 import { rememberWebOrder } from "../../../lib/ordering/webOrders";
 import { toast } from "sonner";
+import { X } from "lucide-react";
 
 export default function FoodCheckoutPage() {
   const router = useRouter();
@@ -53,6 +60,11 @@ export default function FoodCheckoutPage() {
   const [phone, setPhone] = useState("");
   const [stripeReady, setStripeReady] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [promoCodeDraft, setPromoCodeDraft] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState<StripePromoResult | null>(null);
+  const [appliedPromoCode, setAppliedPromoCode] = useState("");
+  const [promoBusy, setPromoBusy] = useState(false);
+  const [promoError, setPromoError] = useState("");
   const confirmRef = useRef<((clientSecret: string) => Promise<string | undefined>) | null>(null);
 
   const serviceDate = useMemo(() => startOfDay(new Date()), []);
@@ -73,11 +85,21 @@ export default function FoodCheckoutPage() {
     ? formatBookingEndTime(serviceDate, selectedStart, FOOD_ONLY_WINDOW_HOURS)
     : "";
 
+  const appliedPromoLike = useMemo((): StripePromoLike => {
+    if (!appliedPromo) return null;
+    return {
+      percentOff: appliedPromo.percentOff,
+      amountOffCents: appliedPromo.amountOffCents,
+      description: appliedPromo.description,
+    };
+  }, [appliedPromo]);
+
   const totals = computeCheckoutTotals({
     merchandiseUsd: subtotal,
     deliveryFeeUsd: deliveryFee,
     onDemandSurchargeUsd: 0,
     tipUsd: tip,
+    promo: appliedPromoLike,
   });
 
   const location = BEACH_LOCATION_OPTIONS.find((l) => l.streetName === streetName);
@@ -85,6 +107,36 @@ export default function FoodCheckoutPage() {
   const registerConfirm = useCallback((fn: (clientSecret: string) => Promise<string | undefined>) => {
     confirmRef.current = fn;
   }, []);
+
+  const handleApplyPromo = async () => {
+    const code = promoCodeDraft.trim();
+    if (!code) return;
+    if (!isSupabaseConfigured()) {
+      setPromoError("Promo codes require cloud checkout.");
+      return;
+    }
+    setPromoBusy(true);
+    setPromoError("");
+    try {
+      const promo = await validateStripePromoCode(code);
+      setAppliedPromo(promo);
+      setAppliedPromoCode(code);
+      toast.success(promo.description || "Promo applied");
+    } catch (error) {
+      setAppliedPromo(null);
+      setAppliedPromoCode("");
+      setPromoError(error instanceof Error ? error.message : "Invalid promo code.");
+    } finally {
+      setPromoBusy(false);
+    }
+  };
+
+  const handleClearPromo = () => {
+    setAppliedPromo(null);
+    setAppliedPromoCode("");
+    setPromoCodeDraft("");
+    setPromoError("");
+  };
 
   if (!lines.length) {
     return (
@@ -150,7 +202,10 @@ export default function FoodCheckoutPage() {
 
     setSubmitting(true);
     try {
-      const clientSecret = await createPaymentIntentClientSecret(Math.round(totals.orderTotalUsd * 100));
+      const clientSecret = await createPaymentIntentClientSecret(
+        Math.round(totals.orderTotalUsd * 100),
+        appliedPromoCode || undefined,
+      );
       const paymentIntentId = await confirmRef.current(clientSecret);
       if (!paymentIntentId) throw new Error("Payment did not complete.");
 
@@ -165,7 +220,9 @@ export default function FoodCheckoutPage() {
         serviceDate,
         startTime: selectedStart,
         endTime,
-        crewNotes: `Food: ${restaurant?.name ?? "Food"}`,
+        crewNotes: `Food: ${restaurant?.name ?? "Food"}${
+          appliedPromoCode ? ` · Promo ${appliedPromoCode}` : ""
+        }`,
         tipAmount: tip,
         subtotal: totals.netMerchandiseUsd,
         serviceFee: totals.netDeliveryFeeUsd,
@@ -350,6 +407,50 @@ export default function FoodCheckoutPage() {
             />
           </div>
 
+          <div className="rounded-2xl border border-border bg-white p-4">
+            <p className="mb-2 text-sm font-semibold text-[#083b6c]">Promo code</p>
+            {appliedPromo ? (
+              <div className="flex items-start justify-between gap-3 rounded-xl border border-[#083b6c]/25 bg-[#e6f9ff] px-3 py-2.5">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-[#083b6c]">{appliedPromoCode}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{appliedPromo.description}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleClearPromo}
+                  className="shrink-0 rounded-full p-1.5 text-muted-foreground hover:bg-white/80 hover:text-foreground"
+                  aria-label="Remove promo code"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <Input
+                  value={promoCodeDraft}
+                  onChange={(e) => {
+                    setPromoCodeDraft(e.target.value.toUpperCase());
+                    if (promoError) setPromoError("");
+                  }}
+                  placeholder="Enter code"
+                  autoCapitalize="characters"
+                  autoCorrect="off"
+                  className="h-11 flex-1 rounded-xl uppercase"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-11 shrink-0 rounded-xl px-4"
+                  disabled={promoBusy || !promoCodeDraft.trim()}
+                  onClick={() => void handleApplyPromo()}
+                >
+                  {promoBusy ? "…" : "Apply"}
+                </Button>
+              </div>
+            )}
+            {promoError ? <p className="mt-2 text-xs text-destructive">{promoError}</p> : null}
+          </div>
+
           <div>
             <p className="mb-2 text-sm font-medium">Driver tip</p>
             <div className="flex flex-wrap gap-2">
@@ -389,6 +490,12 @@ export default function FoodCheckoutPage() {
               <span>Delivery</span>
               <span>${deliveryFee.toFixed(2)}</span>
             </div>
+            {totals.discountUsd > 0 ? (
+              <div className="flex justify-between text-[#083b6c]">
+                <span>Promo{appliedPromoCode ? ` (${appliedPromoCode})` : ""}</span>
+                <span>−${totals.discountUsd.toFixed(2)}</span>
+              </div>
+            ) : null}
             <div className="flex justify-between">
               <span>Tip</span>
               <span>${tip.toFixed(2)}</span>

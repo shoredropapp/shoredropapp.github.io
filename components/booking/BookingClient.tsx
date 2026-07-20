@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { format, startOfDay } from "date-fns";
-import { ArrowLeft, Check, Lock } from "lucide-react";
+import { ArrowLeft, Check, Lock, X } from "lucide-react";
 import { Button } from "../button";
 import { Input } from "../input";
 import { Label } from "../label";
@@ -36,8 +36,14 @@ import {
   isSameEasternDay,
   parseBeachStartClock,
   rentalEndsAfterPickupCutoff,
+  type StripePromoLike,
 } from "../../lib/ordering/time";
-import { isStripeConfigured, createPaymentIntentClientSecret } from "../../lib/services/stripePayment";
+import {
+  isStripeConfigured,
+  createPaymentIntentClientSecret,
+  validateStripePromoCode,
+  type StripePromoResult,
+} from "../../lib/services/stripePayment";
 import { isSupabaseConfigured } from "../../lib/services/supabase";
 import { placeOrderAndDispatch } from "../../lib/services/orderDispatch";
 import { fetchOutstandingGearPoolCounts } from "../../lib/services/outstandingGearPool";
@@ -75,6 +81,11 @@ export default function BookingClient() {
   const [confirmedId, setConfirmedId] = useState<string | null>(null);
   const [confirmedTrackingToken, setConfirmedTrackingToken] = useState<string | null>(null);
   const [serverPool, setServerPool] = useState<Record<InventoryBucket, number> | null>(null);
+  const [promoCodeDraft, setPromoCodeDraft] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState<StripePromoResult | null>(null);
+  const [appliedPromoCode, setAppliedPromoCode] = useState("");
+  const [promoBusy, setPromoBusy] = useState(false);
+  const [promoError, setPromoError] = useState("");
   const confirmRef = useRef<((clientSecret: string) => Promise<string | undefined>) | null>(null);
 
   useEffect(() => {
@@ -156,11 +167,21 @@ export default function BookingClient() {
   const merchandise = gearMerchandise + foodSubtotal;
   const deliveryFees = DELIVERY_FEE + foodDeliveryFee;
 
+  const appliedPromoLike = useMemo((): StripePromoLike => {
+    if (!appliedPromo) return null;
+    return {
+      percentOff: appliedPromo.percentOff,
+      amountOffCents: appliedPromo.amountOffCents,
+      description: appliedPromo.description,
+    };
+  }, [appliedPromo]);
+
   const totals = computeCheckoutTotals({
     merchandiseUsd: merchandise,
     deliveryFeeUsd: deliveryFees,
     onDemandSurchargeUsd: onDemand,
     tipUsd: tip,
+    promo: appliedPromoLike,
   });
 
   const location = BEACH_LOCATION_OPTIONS.find((l) => l.streetName === streetName);
@@ -220,6 +241,36 @@ export default function BookingClient() {
     confirmRef.current = fn;
   }, []);
 
+  const handleApplyPromo = async () => {
+    const code = promoCodeDraft.trim();
+    if (!code) return;
+    if (!isSupabaseConfigured()) {
+      setPromoError("Promo codes require cloud checkout.");
+      return;
+    }
+    setPromoBusy(true);
+    setPromoError("");
+    try {
+      const promo = await validateStripePromoCode(code);
+      setAppliedPromo(promo);
+      setAppliedPromoCode(code);
+      toast.success(promo.description || "Promo applied");
+    } catch (error) {
+      setAppliedPromo(null);
+      setAppliedPromoCode("");
+      setPromoError(error instanceof Error ? error.message : "Invalid promo code.");
+    } finally {
+      setPromoBusy(false);
+    }
+  };
+
+  const handleClearPromo = () => {
+    setAppliedPromo(null);
+    setAppliedPromoCode("");
+    setPromoCodeDraft("");
+    setPromoError("");
+  };
+
   const placeOrder = async () => {
     if (!serviceDate || !location) return;
     if (authRequiredMode && !authUser) {
@@ -264,7 +315,10 @@ export default function BookingClient() {
 
     setSubmitting(true);
     try {
-      const clientSecret = await createPaymentIntentClientSecret(Math.round(totals.orderTotalUsd * 100));
+      const clientSecret = await createPaymentIntentClientSecret(
+        Math.round(totals.orderTotalUsd * 100),
+        appliedPromoCode || undefined,
+      );
       const paymentIntentId = await confirmRef.current(clientSecret);
       if (!paymentIntentId) throw new Error("Payment did not complete.");
 
@@ -326,7 +380,12 @@ export default function BookingClient() {
         serviceDate,
         startTime,
         endTime,
-        crewNotes: notes.trim() || undefined,
+        crewNotes: [
+          notes.trim(),
+          appliedPromoCode ? `Promo ${appliedPromoCode}` : "",
+        ]
+          .filter(Boolean)
+          .join(" · ") || undefined,
         tipAmount: tip,
         subtotal: totals.netMerchandiseUsd,
         serviceFee: totals.netDeliveryFeeUsd,
@@ -856,6 +915,50 @@ export default function BookingClient() {
               <Input className="h-12 rounded-xl" value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={500} />
             </div>
 
+            <div className="rounded-2xl border border-border bg-white p-4">
+              <p className="mb-2 text-sm font-semibold text-[#083b6c]">Promo code</p>
+              {appliedPromo ? (
+                <div className="flex items-start justify-between gap-3 rounded-xl border border-[#083b6c]/25 bg-[#e6f9ff] px-3 py-2.5">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-[#083b6c]">{appliedPromoCode}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">{appliedPromo.description}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleClearPromo}
+                    className="shrink-0 rounded-full p-1.5 text-muted-foreground hover:bg-muted"
+                    aria-label="Remove promo code"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <Input
+                    value={promoCodeDraft}
+                    onChange={(e) => {
+                      setPromoCodeDraft(e.target.value.toUpperCase());
+                      if (promoError) setPromoError("");
+                    }}
+                    placeholder="Enter code"
+                    autoCapitalize="characters"
+                    autoCorrect="off"
+                    className="h-11 flex-1 rounded-xl uppercase"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-11 shrink-0 rounded-xl px-4"
+                    disabled={promoBusy || !promoCodeDraft.trim()}
+                    onClick={() => void handleApplyPromo()}
+                  >
+                    {promoBusy ? "…" : "Apply"}
+                  </Button>
+                </div>
+              )}
+              {promoError ? <p className="mt-2 text-xs text-destructive">{promoError}</p> : null}
+            </div>
+
             <div>
               <p className="mb-2 text-sm font-medium">Crew tip</p>
               <div className="flex flex-wrap gap-2">
@@ -900,6 +1003,12 @@ export default function BookingClient() {
                 <div className="flex justify-between">
                   <span>On-demand</span>
                   <span>${onDemand.toFixed(2)}</span>
+                </div>
+              ) : null}
+              {totals.discountUsd > 0 ? (
+                <div className="flex justify-between text-[#083b6c]">
+                  <span>Promo{appliedPromoCode ? ` (${appliedPromoCode})` : ""}</span>
+                  <span>−${totals.discountUsd.toFixed(2)}</span>
                 </div>
               ) : null}
               <div className="flex justify-between">
