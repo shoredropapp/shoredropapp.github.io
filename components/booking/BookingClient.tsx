@@ -40,6 +40,8 @@ import {
 import { isStripeConfigured, createPaymentIntentClientSecret } from "../../lib/services/stripePayment";
 import { isSupabaseConfigured } from "../../lib/services/supabase";
 import { placeOrderAndDispatch } from "../../lib/services/orderDispatch";
+import { fetchOutstandingGearPoolCounts } from "../../lib/services/outstandingGearPool";
+import { canSellCustomQty, canSellPackage, type InventoryBucket } from "../../lib/ordering/inventory";
 import StripeCardForm from "../checkout/StripeCardForm";
 import CustomerAuthPanel from "../auth/CustomerAuthPanel";
 import { useCustomerAuth } from "../../contexts/CustomerAuthContext";
@@ -72,6 +74,7 @@ export default function BookingClient() {
   const [submitting, setSubmitting] = useState(false);
   const [confirmedId, setConfirmedId] = useState<string | null>(null);
   const [confirmedTrackingToken, setConfirmedTrackingToken] = useState<string | null>(null);
+  const [serverPool, setServerPool] = useState<Record<InventoryBucket, number> | null>(null);
   const confirmRef = useRef<((clientSecret: string) => Promise<string | undefined>) | null>(null);
 
   useEffect(() => {
@@ -93,6 +96,26 @@ export default function BookingClient() {
       setEmail(authUser.email);
     }
   }, [authUser?.email, email]);
+
+  /** Same outstanding-gear pool RPC as iOS/Android — inventory stays in sync. */
+  useEffect(() => {
+    if (!serviceDate || !isSupabaseConfigured()) {
+      setServerPool(null);
+      return;
+    }
+    let cancelled = false;
+    const day = easternDateKey(serviceDate);
+    const pull = async () => {
+      const snap = await fetchOutstandingGearPoolCounts(day);
+      if (!cancelled) setServerPool(snap);
+    };
+    void pull();
+    const id = window.setInterval(() => void pull(), 35_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
+    };
+  }, [serviceDate]);
 
   const todayEastern = useMemo(() => startOfDay(new Date()), []);
   const isSameDay = serviceDate ? isSameEasternDay(serviceDate, new Date()) : false;
@@ -225,6 +248,17 @@ export default function BookingClient() {
     }
     if (!stripeReady || !confirmRef.current) {
       toast.error("Complete payment details first.");
+      return;
+    }
+
+    const freshPool = await fetchOutstandingGearPoolCounts(easternDateKey(serviceDate));
+    setServerPool(freshPool);
+    if (mode === "package" && !canSellPackage(packageId, freshPool)) {
+      toast.error("That package is sold out for this date — pick another or try a different day.");
+      return;
+    }
+    if (mode === "custom" && !canSellCustomQty(customQty, freshPool)) {
+      toast.error("Not enough gear left for that custom setup on this date.");
       return;
     }
 
@@ -642,13 +676,16 @@ export default function BookingClient() {
               <div className="space-y-3">
                 {PACKAGES.map((p) => {
                   const price = getPackageTierPrice(p.id, slotId);
+                  const soldOut = serviceDate ? !canSellPackage(p.id, serverPool) : false;
                   return (
                     <button
                       key={p.id}
                       type="button"
+                      disabled={soldOut}
                       onClick={() => setPackageId(p.id)}
                       className={cn(
                         "flex w-full gap-4 rounded-2xl border-2 p-4 text-left",
+                        soldOut && "opacity-55",
                         packageId === p.id ? "border-[#083b6c] bg-[#e6f9ff]" : "border-border bg-white",
                       )}
                     >
@@ -656,7 +693,9 @@ export default function BookingClient() {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between gap-2">
                           <p className="font-bold text-[#083b6c]">{p.name}</p>
-                          <p className="shrink-0 font-semibold text-[#083b6c]">${price.toFixed(2)}</p>
+                          <p className="shrink-0 font-semibold text-[#083b6c]">
+                            {soldOut ? "Sold out" : `$${price.toFixed(2)}`}
+                          </p>
                         </div>
                         <p className="text-xs text-muted-foreground">{p.items.join(" · ")}</p>
                       </div>
