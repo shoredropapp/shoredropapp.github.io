@@ -53,7 +53,7 @@ export const blogPosts: BlogPost[] = [
           "The Sandy Duo - 2 chairs, 1 umbrella, 1 small cooler with ice. Starting at $44.99. Great for two people who want to relax without the hassle.",
           "The Shady Bunch - 4 chairs, 1 tent, 1 large cooler with ice. Starting at $64.99. A solid setup for a small group or family.",
           "The Mega Drop - 8 chairs, 2 tents, 2 large coolers with ice. Starting at $119.99. The ultimate beach day for large groups, birthday parties, or family reunions.",
-          "You can also build your own setup by choosing individual items - chairs at $15 each, umbrellas at $30, tents at $25, small coolers at $15, large coolers at $25.",
+          "You can also build your own setup by choosing individual items - chairs at $15 each, umbrellas at $20, tents at $25, small coolers at $15, large coolers at $25.",
         ],
       },
       {
