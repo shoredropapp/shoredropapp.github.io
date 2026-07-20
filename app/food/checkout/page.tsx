@@ -42,7 +42,7 @@ export default function FoodCheckoutPage() {
   const { user: authUser, initialized: authInitialized, authRequiredMode } = useCustomerAuth();
   const { lines, setQty, clear, subtotal } = useFoodBag();
   const restaurant = getFoodRestaurant(lines[0]?.restaurantId ?? "watermans");
-  const deliveryFee = restaurant?.deliveryFee ?? 5.99;
+  const deliveryFee = restaurant?.deliveryFee ?? 8.99;
   const minimum = restaurant?.minimumOrder ?? 24.99;
 
   const [timingMode, setTimingMode] = useState<"asap" | "schedule">("asap");

@@ -151,7 +151,7 @@ export default function BookingClient() {
   const foodRestaurant = foodLines.length
     ? getFoodRestaurant(foodLines[0]!.restaurantId)
     : undefined;
-  const foodDeliveryFee = foodLines.length ? (foodRestaurant?.deliveryFee ?? 5.99) : 0;
+  const foodDeliveryFee = foodLines.length ? (foodRestaurant?.deliveryFee ?? 8.99) : 0;
   const foodMinimum = foodRestaurant?.minimumOrder ?? 24.99;
   const merchandise = gearMerchandise + foodSubtotal;
   const deliveryFees = DELIVERY_FEE + foodDeliveryFee;

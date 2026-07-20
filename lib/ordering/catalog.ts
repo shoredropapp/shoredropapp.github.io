@@ -220,7 +220,7 @@ export const FOOD_RESTAURANTS = [
     cuisine: "Surfside American",
     rating: 4.7,
     etaLabel: "25–40 min",
-    deliveryFee: 5.99,
+    deliveryFee: 8.99,
     minimumOrder: 24.99,
     tagline: "Home of the Orange Crush",
     heroImage: "/assets/food/food-watermans-restaurant.jpg",
